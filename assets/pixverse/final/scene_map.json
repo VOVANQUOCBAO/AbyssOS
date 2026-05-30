@@ -1,0 +1,42 @@
+{
+  "video": "D:\\ackk\\assets\\pixverse\\final\\abyssos-main-seekable.mp4",
+  "duration": 39,
+  "scenes": [
+    {
+      "id": "shot-01-planetfall",
+      "label": "Tiếp cận hành tinh lạ",
+      "seek_start": 0,
+      "duration": 6
+    },
+    {
+      "id": "shot-02-ocean-descent",
+      "label": "Lặn vào đại dương phát quang",
+      "seek_start": 6,
+      "duration": 6
+    },
+    {
+      "id": "shot-03-scan",
+      "label": "Quét sinh vật và khoáng sản",
+      "seek_start": 12,
+      "duration": 7
+    },
+    {
+      "id": "shot-04-ruins",
+      "label": "Phát hiện tàn tích cổ",
+      "seek_start": 19,
+      "duration": 6
+    },
+    {
+      "id": "shot-05-leviathan",
+      "label": "Khóa mục tiêu leviathan",
+      "seek_start": 25,
+      "duration": 7
+    },
+    {
+      "id": "shot-06-signal-rise",
+      "label": "Thoát hiểm và phát tín hiệu",
+      "seek_start": 32,
+      "duration": 7
+    }
+  ]
+}

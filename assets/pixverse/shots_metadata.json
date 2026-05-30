@@ -1,0 +1,81 @@
+{
+  "project": "AbyssOS Subsea Survival Protocol",
+  "model": "v6",
+  "quality": "1080p",
+  "aspect_ratio": "16:9",
+  "seed": 882144,
+  "shots": [
+    {
+      "id": "shot-01-planetfall",
+      "label": "Tiếp cận hành tinh lạ",
+      "duration": 6,
+      "seek_start": 0,
+      "video_id": 405507441767494,
+      "file_name": "shot-01-planetfall.mp4",
+      "file_path": "D:\\ackk\\assets\\pixverse\\shots\\shot-01-planetfall.mp4",
+      "prompt": "A compact survival craft drops through turquoise clouds toward a vast alien ocean planet, trailing vapor as the camera follows just behind the hull, sunlight breaks across endless water, bright reef islands and colossal cloud banks open below, the pilot commits to a fast descent toward a glowing blue landing zone. Keep the same compact survival submersible, the same alien ocean planet, a bright colorful underwater world with bioluminescent coral, strange fish and glowing minerals, strong gameplay clarity, natural underwater ambience, sonar pings, engine hum, creature calls only, no spoken dialogue, no singing, no subtitles, no on-screen text or logos, and cohesive visual continuity across every shot.",
+      "cover_url": "https://media.pixverse.ai/pixverse%2Fvideo%2Fframe%2F584cad6e-3828-4e88-b353-f374decee978.jpg",
+      "video_url": "https://media.pixverse.ai/pixverse%2Fmp4%2Fmedia%2Fweb%2Fori%2Fcc1f3a29-d7af-4d3c-a6a0-52acd5427ae6_seed882144.mp4"
+    },
+    {
+      "id": "shot-02-ocean-descent",
+      "label": "Lặn vào đại dương phát quang",
+      "duration": 6,
+      "seek_start": 6,
+      "video_id": 405507649343893,
+      "file_name": "shot-02-ocean-descent.mp4",
+      "file_path": "D:\\ackk\\assets\\pixverse\\shots\\shot-02-ocean-descent.mp4",
+      "prompt": "The same craft punches through the ocean surface and dives into clear tropical water, long alien kelp fronds sway past the canopy, schools of glowing fish scatter, red cyan and gold coral terraces spread beneath the hull, and the craft sinks deeper into a vivid living reef. Keep the same compact survival submersible, the same alien ocean planet, a bright colorful underwater world with bioluminescent coral, strange fish and glowing minerals, strong gameplay clarity, natural underwater ambience, sonar pings, engine hum, creature calls only, no spoken dialogue, no singing, no subtitles, no on-screen text or logos, and cohesive visual continuity across every shot.",
+      "cover_url": "https://media.pixverse.ai/pixverse%2Fvideo%2Fframe%2F848120dd-843f-4943-b46b-5f845aa90327.jpg",
+      "video_url": "https://media.pixverse.ai/pixverse%2Fmp4%2Fmedia%2Fweb%2Fori%2F87e16554-885f-4a58-82c1-6f2b04a8e059_seed882144.mp4"
+    },
+    {
+      "id": "shot-03-scan",
+      "label": "Quét sinh vật và khoáng sản",
+      "duration": 7,
+      "seek_start": 12,
+      "video_id": 405507803624211,
+      "file_name": "shot-03-scan.mp4",
+      "file_path": "D:\\ackk\\assets\\pixverse\\shots\\shot-03-scan.mp4",
+      "prompt": "First-person cockpit view from the submersible as a scan pulse sweeps across darting alien fish, branching coral towers and bright cobalt amber and magenta mineral nodes, holographic scan rings expand over the seabed, tagged lifeforms glide through the beam, and the craft steadies itself between reef pillars. Keep the same compact survival submersible, the same alien ocean planet, a bright colorful underwater world with bioluminescent coral, strange fish and glowing minerals, strong gameplay clarity, natural underwater ambience, sonar pings, engine hum, creature calls only, no spoken dialogue, no singing, no subtitles, no on-screen text or logos, and cohesive visual continuity across every shot.",
+      "cover_url": "https://media.pixverse.ai/pixverse%2Fvideo%2Fframe%2F59bdfa0f-aa2c-44d6-a9bf-9a709137dac6.jpg",
+      "video_url": "https://media.pixverse.ai/pixverse%2Fmp4%2Fmedia%2Fweb%2Fori%2F8a2df172-ce7d-4a29-8cf7-655743f9ffa8_seed882144.mp4"
+    },
+    {
+      "id": "shot-04-ruins",
+      "label": "Phát hiện tàn tích cổ",
+      "duration": 6,
+      "seek_start": 19,
+      "video_id": 405507978694368,
+      "file_name": "shot-04-ruins.mp4",
+      "file_path": "D:\\ackk\\assets\\pixverse\\shots\\shot-04-ruins.mp4",
+      "prompt": "The submersible threads through a giant mushroom-coral forest into an ancient alien structure half-buried in the sand, blue energy veins flicker across stone arches, small scavenger creatures circle the entrance, and the camera glides forward as the pilot eases into the ruin for a close inspection. Keep the same compact survival submersible, the same alien ocean planet, a bright colorful underwater world with bioluminescent coral, strange fish and glowing minerals, strong gameplay clarity, natural underwater ambience, sonar pings, engine hum, creature calls only, no spoken dialogue, no singing, no subtitles, no on-screen text or logos, and cohesive visual continuity across every shot.",
+      "cover_url": "https://media.pixverse.ai/pixverse%2Fvideo%2Fframe%2F0227e626-60a4-49c8-8d98-f4282086acc1.jpg",
+      "video_url": "https://media.pixverse.ai/pixverse%2Fmp4%2Fmedia%2Fweb%2Fori%2F865e5f65-4c27-4b3d-87df-aaf95c18b180_seed882144.mp4"
+    },
+    {
+      "id": "shot-05-leviathan",
+      "label": "Khóa mục tiêu leviathan",
+      "duration": 7,
+      "seek_start": 25,
+      "video_id": 405508121106853,
+      "file_name": "shot-05-leviathan.mp4",
+      "file_path": "D:\\ackk\\assets\\pixverse\\shots\\shot-05-leviathan.mp4",
+      "prompt": "A colossal bioluminescent leviathan surges out of a dark trench beside the ruin, the craft banks hard through bubbles and silt, warning lights strobe across the canopy, the creature snaps past the camera with glowing fins whipping the water, and the pilot veers away to avoid the attack. Keep the same compact survival submersible, the same alien ocean planet, a bright colorful underwater world with bioluminescent coral, strange fish and glowing minerals, strong gameplay clarity, natural underwater ambience, sonar pings, engine hum, creature calls only, no spoken dialogue, no singing, no subtitles, no on-screen text or logos, and cohesive visual continuity across every shot.",
+      "cover_url": "https://media.pixverse.ai/pixverse%2Fvideo%2Fframe%2F0ca8d70c-5fe8-4b87-bc36-7d3c84bde087.jpg",
+      "video_url": "https://media.pixverse.ai/pixverse%2Fmp4%2Fmedia%2Fweb%2Fori%2F669922a1-e39d-41cf-b684-d4e2d84fa5cd_seed882144.mp4"
+    },
+    {
+      "id": "shot-06-signal-rise",
+      "label": "Thoát hiểm và phát tín hiệu",
+      "duration": 7,
+      "seek_start": 32,
+      "video_id": 405508307625646,
+      "file_name": "shot-06-signal-rise.mp4",
+      "file_path": "D:\\ackk\\assets\\pixverse\\shots\\shot-06-signal-rise.mp4",
+      "prompt": "The damaged craft rockets upward through a volcanic vent field and neon crystal arches while an emergency beacon pulses from the hull, turbulent currents peel away behind it, the water grows brighter near the surface, and the final wide view reveals the strange ocean planet shimmering in daylight as the signal climbs toward orbit. Keep the same compact survival submersible, the same alien ocean planet, a bright colorful underwater world with bioluminescent coral, strange fish and glowing minerals, strong gameplay clarity, natural underwater ambience, sonar pings, engine hum, creature calls only, no spoken dialogue, no singing, no subtitles, no on-screen text or logos, and cohesive visual continuity across every shot.",
+      "cover_url": "https://media.pixverse.ai/pixverse%2Fvideo%2Fframe%2Fc445a9e9-b522-4933-99fa-80f0ea98b2da.jpg",
+      "video_url": "https://media.pixverse.ai/pixverse%2Fmp4%2Fmedia%2Fweb%2Fori%2F22f96d65-a662-4f7e-b14c-c1637b8feec7_seed882144.mp4"
+    }
+  ]
+}

@@ -1,0 +1,2208 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AbyssOS | Deep Research Command</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              abyss: {
+                950: "#020712",
+                900: "#07111f",
+                850: "#0b1729",
+                800: "#10223a",
+                700: "#15385c",
+              },
+              cyanGlow: "#5ef2ff",
+              tealGlow: "#2dd4bf",
+              warning: "#ffd166",
+              dangerGlow: "#ff7a90",
+            },
+            fontFamily: {
+              display: ["Orbitron", "Oxanium", "sans-serif"],
+              body: ["Inter", "Chakra Petch", "sans-serif"],
+            },
+            boxShadow: {
+              neon: "0 0 0 1px rgba(94, 242, 255, 0.22), 0 0 32px rgba(94, 242, 255, 0.16)",
+              intense: "0 0 0 1px rgba(94, 242, 255, 0.3), 0 0 42px rgba(45, 212, 191, 0.18)",
+            },
+            keyframes: {
+              pulseRing: {
+                "0%": { transform: "scale(0.82)", opacity: "0.65" },
+                "100%": { transform: "scale(1.28)", opacity: "0" },
+              },
+              radarSpin: {
+                "0%": { transform: "rotate(0deg)" },
+                "100%": { transform: "rotate(360deg)" },
+              },
+              dangerPulse: {
+                "0%, 100%": { boxShadow: "0 0 0 1px rgba(255, 122, 144, 0.18), 0 0 20px rgba(255, 122, 144, 0.12)" },
+                "50%": { boxShadow: "0 0 0 1px rgba(255, 122, 144, 0.34), 0 0 34px rgba(255, 122, 144, 0.24)" },
+              },
+              scanLine: {
+                "0%": { transform: "translateY(-100%)" },
+                "100%": { transform: "translateY(320%)" },
+              },
+              floaty: {
+                "0%, 100%": { transform: "translateY(0px)" },
+                "50%": { transform: "translateY(-4px)" },
+              },
+            },
+            animation: {
+              pulseRing: "pulseRing 2.8s ease-out infinite",
+              radarSpin: "radarSpin 8s linear infinite",
+              dangerPulse: "dangerPulse 2.2s ease-in-out infinite",
+              scanLine: "scanLine 5s linear infinite",
+              floaty: "floaty 4s ease-in-out infinite",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;600;700&family=Oxanium:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+      }
+
+      body {
+        background:
+          radial-gradient(circle at top, rgba(45, 212, 191, 0.18), transparent 26%),
+          radial-gradient(circle at 82% 18%, rgba(94, 242, 255, 0.16), transparent 24%),
+          linear-gradient(145deg, #020712 0%, #07111f 52%, #020712 100%);
+      }
+
+      .noise::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.08;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 96px 96px;
+        mask-image: radial-gradient(circle at center, black, transparent 92%);
+      }
+
+      .thin-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(94, 242, 255, 0.35) transparent;
+      }
+
+      .thin-scrollbar::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .thin-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(94, 242, 255, 0.35);
+        border-radius: 999px;
+      }
+
+      .hud-text-shadow {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+      }
+    </style>
+  </head>
+  <body class="h-screen overflow-hidden font-body text-slate-100">
+    <div class="noise relative isolate h-screen overflow-hidden">
+      <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute -left-24 top-16 h-72 w-72 rounded-full bg-cyanGlow/10 blur-3xl"></div>
+        <div class="absolute bottom-8 right-12 h-80 w-80 rounded-full bg-tealGlow/10 blur-3xl"></div>
+      </div>
+
+      <div
+        id="launcherView"
+        class="relative h-screen w-full overflow-x-hidden overflow-y-auto bg-[radial-gradient(circle_at_14%_14%,rgba(94,242,255,0.22),transparent_24%),radial-gradient(circle_at_84%_18%,rgba(168,85,247,0.22),transparent_26%),radial-gradient(circle_at_50%_100%,rgba(59,130,246,0.18),transparent_30%),linear-gradient(135deg,#07101b_0%,#11183a_34%,#1e1b4b_68%,#07101b_100%)]"
+      >
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(94,242,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(94,242,255,0.05)_1px,transparent_1px)] bg-[size:42px_42px] opacity-35"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_12%,rgba(255,255,255,0.08),transparent_28%)] opacity-60"></div>
+
+        <div class="relative flex min-h-full flex-col">
+          <header class="border-b border-cyanGlow/10 bg-[linear-gradient(90deg,rgba(12,18,40,0.92),rgba(33,25,74,0.88),rgba(12,18,40,0.92))] backdrop-blur-xl">
+            <div class="mx-auto flex h-14 w-full max-w-[1380px] items-center justify-between px-6">
+              <div class="flex items-center gap-6">
+                <p class="font-display text-xs uppercase tracking-[0.42em] text-cyanGlow/80">Trae Deck</p>
+                <nav id="launcherPrimaryNav" class="hidden items-center gap-2 lg:flex">
+                  <button data-section="store" class="rounded-full px-3 py-2 text-[11px] uppercase tracking-[0.28em] text-white transition hover:text-cyanGlow">Store</button>
+                  <button data-section="library" class="rounded-full px-3 py-2 text-[11px] uppercase tracking-[0.28em] text-slate-400 transition hover:text-cyanGlow">Library</button>
+                  <button data-section="community" class="rounded-full px-3 py-2 text-[11px] uppercase tracking-[0.28em] text-slate-400 transition hover:text-cyanGlow">Community</button>
+                  <button data-section="news" class="rounded-full px-3 py-2 text-[11px] uppercase tracking-[0.28em] text-slate-400 transition hover:text-cyanGlow">News</button>
+                </nav>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <div class="hidden rounded-full border border-cyanGlow/20 bg-white/5 px-4 py-2 shadow-[0_0_18px_rgba(94,242,255,0.08)] md:flex md:w-[280px]">
+                  <span class="text-xs text-slate-500">Tìm trong cửa hàng</span>
+                </div>
+                <div class="rounded-full border border-cyanGlow/20 bg-[linear-gradient(90deg,rgba(94,242,255,0.16),rgba(168,85,247,0.14))] px-3 py-2 text-[11px] uppercase tracking-[0.24em] text-cyanGlow shadow-[0_0_18px_rgba(94,242,255,0.12)]">
+                  Deck User
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <div class="mx-auto flex w-full max-w-[1380px] flex-col px-4 py-5 sm:px-6">
+            <div id="storeSectionContent">
+            <div class="rounded-[24px] border border-cyanGlow/20 bg-[linear-gradient(90deg,rgba(20,35,68,0.74),rgba(53,44,112,0.72),rgba(20,35,68,0.74))] px-5 py-3 shadow-intense backdrop-blur-xl">
+              <div id="launcherGenreTabs" class="flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-[0.28em]"></div>
+            </div>
+
+            <div class="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-12 xl:items-start">
+              <section id="launcherHeroPanel" class="relative cursor-pointer overflow-hidden rounded-[32px] border border-cyanGlow/20 bg-[linear-gradient(135deg,rgba(10,18,44,0.72),rgba(41,34,92,0.58))] shadow-intense backdrop-blur-xl transition hover:border-cyanGlow/40 xl:col-span-8 xl:self-start">
+              <img id="launcherHeroImage" src="" alt="Game artwork" class="absolute inset-0 h-full w-full object-cover opacity-60" />
+              <div class="absolute inset-0 bg-gradient-to-r from-abyss-950 via-indigo-950/55 to-violet-950/30"></div>
+              <div class="absolute inset-0 bg-[radial-gradient(circle_at_72%_24%,rgba(94,242,255,0.22),transparent_22%),radial-gradient(circle_at_86%_20%,rgba(168,85,247,0.2),transparent_18%)]"></div>
+
+              <div class="relative flex h-full flex-col justify-between p-6 lg:p-8">
+                <div class="max-w-2xl">
+                  <p id="launcherGenre" class="font-display text-xs uppercase tracking-[0.45em] text-cyanGlow/80"></p>
+                  <h2 id="launcherTitle" class="mt-4 font-display text-3xl uppercase tracking-[0.08em] text-white sm:text-4xl xl:text-5xl"></h2>
+                  <p id="launcherTagline" class="mt-4 max-w-xl text-base leading-7 text-slate-200 lg:text-lg"></p>
+                  <p id="launcherDescription" class="mt-5 max-w-2xl text-sm leading-6 text-slate-300 lg:leading-7"></p>
+
+                  <div class="mt-6 flex flex-wrap gap-2" id="launcherTags"></div>
+
+                  <div class="mt-8 flex flex-wrap gap-3">
+                    <button
+                      id="launchGameButton"
+                      type="button"
+                      class="rounded-2xl border border-cyanGlow/35 bg-[linear-gradient(90deg,rgba(94,242,255,0.18),rgba(59,130,246,0.14))] px-6 py-4 font-display text-sm uppercase tracking-[0.28em] text-cyanGlow shadow-[0_0_24px_rgba(94,242,255,0.16)] transition hover:border-cyanGlow/55 hover:bg-cyanGlow/20"
+                    >
+                      Play
+                    </button>
+                    <button
+                      id="previewGameButton"
+                      type="button"
+                      class="rounded-2xl border border-white/10 bg-black/25 px-6 py-4 font-display text-sm uppercase tracking-[0.28em] text-white/85 transition hover:border-cyanGlow/30 hover:text-cyanGlow"
+                    >
+                      Preview
+                    </button>
+                  </div>
+                </div>
+
+                <div class="mt-6 grid gap-3 md:grid-cols-3">
+                  <div class="rounded-[22px] border border-cyanGlow/18 bg-[linear-gradient(135deg,rgba(8,16,34,0.7),rgba(27,44,92,0.52))] p-4">
+                    <p class="text-[11px] uppercase tracking-[0.28em] text-slate-400">Status</p>
+                    <p id="launcherStatus" class="mt-2 font-display text-lg uppercase tracking-[0.12em] text-cyanGlow"></p>
+                  </div>
+                  <div class="rounded-[22px] border border-cyanGlow/18 bg-[linear-gradient(135deg,rgba(8,16,34,0.7),rgba(36,28,86,0.54))] p-4">
+                    <p class="text-[11px] uppercase tracking-[0.28em] text-slate-400">Mode</p>
+                    <p id="launcherMode" class="mt-2 font-display text-lg uppercase tracking-[0.12em] text-white"></p>
+                  </div>
+                  <div class="rounded-[22px] border border-cyanGlow/18 bg-[linear-gradient(135deg,rgba(8,16,34,0.7),rgba(24,67,99,0.5))] p-4">
+                    <p class="text-[11px] uppercase tracking-[0.28em] text-slate-400">Build</p>
+                    <p id="launcherBuild" class="mt-2 font-display text-lg uppercase tracking-[0.12em] text-white"></p>
+                  </div>
+                </div>
+              </div>
+              </section>
+
+              <aside class="flex flex-col gap-4 xl:col-span-4 xl:row-span-3 xl:sticky xl:top-5">
+                <div class="rounded-[28px] border border-cyanGlow/18 bg-[linear-gradient(135deg,rgba(10,18,40,0.78),rgba(35,29,82,0.54))] p-4 shadow-neon backdrop-blur-xl">
+                  <div class="flex items-center justify-between">
+                    <p class="font-display text-xs uppercase tracking-[0.42em] text-cyanGlow/80">Chi Tiết Game</p>
+                    <p class="text-[11px] uppercase tracking-[0.28em] text-slate-500">Mock Store</p>
+                  </div>
+                  <div class="mt-4 grid gap-3" id="featuredGames"></div>
+                </div>
+
+                <div class="rounded-[28px] border border-cyanGlow/18 bg-[linear-gradient(135deg,rgba(10,18,40,0.78),rgba(22,46,88,0.52))] p-4 shadow-neon backdrop-blur-xl">
+                  <p class="font-display text-xs uppercase tracking-[0.42em] text-cyanGlow/80">Audio Boot</p>
+                  <p class="mt-3 text-sm leading-6 text-slate-300">
+                    Audio của HUD sẽ bật ngay khi bạn nhấn `Play` vào game để tránh bị browser chặn autoplay.
+                  </p>
+                  <div class="mt-4 rounded-[20px] border border-cyanGlow/18 bg-[linear-gradient(90deg,rgba(94,242,255,0.08),rgba(168,85,247,0.08))] p-4">
+                    <p class="text-[11px] uppercase tracking-[0.28em] text-slate-400">Ready State</p>
+                    <p id="launcherAudioHint" class="mt-2 text-sm text-cyanGlow">Nhấn Play để kích hoạt ambient + HUD audio.</p>
+                  </div>
+                </div>
+              </aside>
+
+              <section class="relative isolate overflow-hidden rounded-[28px] border border-cyanGlow/18 bg-[linear-gradient(135deg,rgba(10,18,40,0.96),rgba(39,31,88,0.92))] p-5 shadow-neon xl:col-span-8">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="font-display text-xs uppercase tracking-[0.42em] text-cyanGlow/80">Tựa Phổ Biến</p>
+                  <p class="mt-2 text-sm text-slate-400">Chọn một tựa game để cập nhật phần hero phía trên, giống storefront Steam.</p>
+                </div>
+                <div class="text-[11px] uppercase tracking-[0.28em] text-slate-500" id="libraryCount">04 Games</div>
+              </div>
+
+              <div id="gameLibraryList" class="relative z-10 mt-5 grid grid-cols-12 gap-4 lg:gap-5"></div>
+              </section>
+
+              <section class="relative isolate overflow-hidden rounded-[28px] border border-cyanGlow/18 bg-[linear-gradient(135deg,rgba(10,18,40,0.97),rgba(28,61,95,0.92))] p-5 shadow-neon xl:col-span-8">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="font-display text-xs uppercase tracking-[0.42em] text-cyanGlow/80">Gợi Ý Thêm</p>
+                  <p class="mt-2 text-sm text-slate-400">Một dải mock data bổ sung để launcher có thể cuộn giống storefront thật.</p>
+                </div>
+                <p class="text-[11px] uppercase tracking-[0.28em] text-slate-500">Scrollable Storefront</p>
+              </div>
+              <div id="launcherDeals" class="relative z-10 mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4"></div>
+              </section>
+            </div>
+            </div>
+
+            <section id="librarySectionContent" class="hidden">
+              <div class="rounded-[24px] border border-cyanGlow/20 bg-[linear-gradient(90deg,rgba(18,31,58,0.78),rgba(47,44,104,0.74),rgba(18,31,58,0.78))] px-5 py-4 shadow-intense backdrop-blur-xl">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p class="font-display text-xs uppercase tracking-[0.42em] text-cyanGlow/80">Library</p>
+                    <p class="mt-2 text-sm text-slate-400">Các game đã cài, demo có thể mở ngay và mock library để trình diễn UX.</p>
+                  </div>
+                  <p class="text-[11px] uppercase tracking-[0.28em] text-slate-500">Installed + Playable</p>
+                </div>
+              </div>
+              <div id="librarySectionGrid" class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3"></div>
+            </section>
+
+            <section id="communitySectionContent" class="hidden">
+              <div class="rounded-[24px] border border-cyanGlow/20 bg-[linear-gradient(90deg,rgba(18,31,58,0.78),rgba(47,44,104,0.74),rgba(18,31,58,0.78))] px-5 py-4 shadow-intense backdrop-blur-xl">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p class="font-display text-xs uppercase tracking-[0.42em] text-cyanGlow/80">Community</p>
+                    <p class="mt-2 text-sm text-slate-400">Feed tương tác mô phỏng rescue signal, comment và player discoveries để ăn điểm engagement.</p>
+                  </div>
+                  <p class="text-[11px] uppercase tracking-[0.28em] text-slate-500">Rescue + Social Feed</p>
+                </div>
+              </div>
+              <div class="mt-5 grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
+                <div id="communityFeed" class="grid gap-4"></div>
+                <div id="communitySidebar" class="grid gap-4"></div>
+              </div>
+            </section>
+
+            <section id="newsSectionContent" class="hidden">
+              <div class="rounded-[24px] border border-cyanGlow/20 bg-[linear-gradient(90deg,rgba(18,31,58,0.78),rgba(47,44,104,0.74),rgba(18,31,58,0.78))] px-5 py-4 shadow-intense backdrop-blur-xl">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p class="font-display text-xs uppercase tracking-[0.42em] text-cyanGlow/80">News</p>
+                    <p class="mt-2 text-sm text-slate-400">Patch notes, expedition updates và roadmap mock để launcher giống app game thật.</p>
+                  </div>
+                  <p class="text-[11px] uppercase tracking-[0.28em] text-slate-500">Updates + Devlog</p>
+                </div>
+              </div>
+              <div id="newsSectionGrid" class="mt-5 grid gap-4 xl:grid-cols-3"></div>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <main id="gameView" class="relative hidden h-screen w-full overflow-hidden">
+        <video
+          id="missionVideo"
+          class="absolute inset-0 h-full w-full object-cover"
+          muted
+          autoplay
+          loop
+          playsinline
+          preload="auto"
+          poster=""
+        >
+          <source id="missionVideoSource" src="" type="video/mp4" />
+          Trình duyệt của bạn chưa hỗ trợ phát video HTML5.
+        </video>
+        <audio id="missionAudio" preload="auto" loop>
+          <source src="" type="audio/mp4" />
+        </audio>
+
+        <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_18%,rgba(2,7,18,0.58)_100%)]"></div>
+        <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(94,242,255,0.28),transparent_26%),radial-gradient(circle_at_82%_22%,rgba(168,85,247,0.22),transparent_24%),radial-gradient(circle_at_50%_88%,rgba(250,204,21,0.14),transparent_20%)]"></div>
+        <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(94,242,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(94,242,255,0.06)_1px,transparent_1px)] bg-[size:36px_36px] opacity-50"></div>
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-abyss-950/80 via-abyss-950/30 to-transparent"></div>
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-transparent via-cyanGlow/10 to-transparent animate-scanLine"></div>
+        <div class="pointer-events-none absolute -left-20 top-1/3 h-72 w-72 rounded-full bg-cyanGlow/12 blur-3xl"></div>
+        <div class="pointer-events-none absolute -right-16 top-24 h-64 w-64 rounded-full bg-fuchsia-500/12 blur-3xl"></div>
+
+        <div class="absolute inset-0">
+          <header class="pointer-events-auto absolute left-6 right-6 top-5 flex items-start justify-between gap-4">
+            <div class="flex items-start gap-4">
+              <button
+                id="backToLauncherButton"
+                type="button"
+                class="rounded-full bg-black/18 px-3 py-2 text-[11px] tracking-[0.22em] text-white/72 backdrop-blur transition hover:text-cyanGlow"
+              >
+                ← Library
+              </button>
+
+              <div class="max-w-xs">
+                <p id="gameBrandLabel" class="font-display text-[11px] tracking-[0.34em] text-cyanGlow/80">AbyssOS</p>
+                <p id="gameBrandTitle" class="mt-1 font-display text-lg tracking-[0.08em] text-white">Deep Research Command</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-2 rounded-full border border-white/10 bg-black/24 px-3 py-2.5 backdrop-blur-xl shadow-[0_12px_40px_rgba(2,7,18,0.24)]">
+                <div class="min-w-[88px] rounded-full bg-white/5 px-3 py-2">
+                  <div class="flex items-center gap-2 text-cyanGlow">
+                    <span class="text-sm">◌</span>
+                    <span class="text-[10px] tracking-[0.2em] text-white/58">O2</span>
+                  </div>
+                  <p id="oxygenStat" class="mt-1 font-display text-lg leading-none tracking-[0.04em] text-white">129/150</p>
+                  <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
+                    <div id="oxygenMeter" class="h-full rounded-full bg-cyanGlow shadow-[0_0_14px_rgba(0,216,255,0.45)]"></div>
+                  </div>
+                </div>
+                <div class="min-w-[78px] rounded-full bg-white/5 px-3 py-2">
+                  <div class="flex items-center gap-2 text-cyanGlow">
+                    <span class="text-sm">◈</span>
+                    <span class="text-[10px] tracking-[0.2em] text-white/58">Depth</span>
+                  </div>
+                  <p id="depthStat" class="mt-1 font-display text-lg leading-none tracking-[0.04em] text-white">420m</p>
+                  <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
+                    <div id="depthMeter" class="h-full rounded-full bg-cyanGlow shadow-[0_0_14px_rgba(0,216,255,0.45)]"></div>
+                  </div>
+                </div>
+                <div class="min-w-[74px] rounded-full bg-white/5 px-3 py-2">
+                  <div class="flex items-center gap-2 text-warning">
+                    <span class="text-sm">⬡</span>
+                    <span class="text-[10px] tracking-[0.2em] text-white/58">Hull</span>
+                  </div>
+                  <p id="hullStat" class="mt-1 font-display text-lg leading-none tracking-[0.04em] text-white">72%</p>
+                  <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
+                    <div id="hullMeter" class="h-full rounded-full bg-warning shadow-[0_0_14px_rgba(255,115,90,0.28)]"></div>
+                  </div>
+                </div>
+                <div class="min-w-[74px] rounded-full bg-white/5 px-3 py-2">
+                  <div class="flex items-center gap-2 text-violet-300">
+                    <span class="text-sm">✦</span>
+                    <span class="text-[10px] tracking-[0.2em] text-white/58">Energy</span>
+                  </div>
+                  <p id="energyStat" class="mt-1 font-display text-lg leading-none tracking-[0.04em] text-white">74%</p>
+                  <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
+                    <div id="energyMeter" class="h-full rounded-full bg-violet-400 shadow-[0_0_14px_rgba(155,109,255,0.28)]"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rounded-full border border-white/10 bg-black/22 p-1.5 backdrop-blur-xl">
+                <input id="volumeSlider" type="range" min="0" max="100" value="72" class="hidden" />
+                <button
+                  id="audioToggle"
+                  type="button"
+                  class="rounded-full px-3 py-2 text-lg text-white/86 transition hover:text-cyanGlow"
+                >
+                  🔊
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <section class="pointer-events-none absolute inset-x-0 top-[5.9rem] bottom-5">
+            <aside class="pointer-events-auto absolute left-6 top-8 flex w-[136px] flex-col items-center gap-4">
+              <div class="w-full">
+                <div class="mb-2 flex items-center justify-end">
+                  <div id="sectorPill" class="text-[10px] tracking-[0.18em] text-white/56">B-12</div>
+                </div>
+
+                <button id="radarButton" type="button" class="mx-auto flex w-full items-center justify-center rounded-full bg-black/18 p-2 backdrop-blur-md transition hover:bg-black/28">
+                  <div id="radarScope" class="relative flex aspect-square w-full max-w-[108px] items-center justify-center rounded-full transition">
+                    <div class="absolute h-[90%] w-[90%] rounded-full bg-[conic-gradient(from_180deg,transparent_0deg,transparent_300deg,rgba(0,216,255,0.08)_332deg,rgba(0,216,255,0.4)_360deg)] animate-radarSpin"></div>
+                    <div class="absolute h-[86%] w-[86%] rounded-full border border-cyanGlow/12"></div>
+                    <div class="absolute h-[58%] w-[58%] rounded-full border border-cyanGlow/14"></div>
+                    <div class="absolute h-[30%] w-[30%] rounded-full border border-cyanGlow/16"></div>
+                    <div class="absolute h-full w-px bg-cyanGlow/14"></div>
+                    <div class="absolute h-px w-full bg-cyanGlow/14"></div>
+                    <div id="radarPingRing" class="absolute h-12 w-12 rounded-full border border-cyanGlow/28 animate-pulseRing"></div>
+                    <div class="absolute h-3 w-3 rounded-full bg-cyanGlow shadow-[0_0_14px_rgba(0,216,255,0.7)]"></div>
+                    <div class="absolute left-[18%] top-[28%] h-1.5 w-1.5 rounded-full bg-tealGlow/90"></div>
+                    <div class="absolute bottom-[24%] right-[20%] h-1.5 w-1.5 rounded-full bg-warning/90"></div>
+                  </div>
+                </button>
+              </div>
+
+              <div id="depthButtons" class="relative w-full space-y-2 pl-3"></div>
+            </aside>
+
+            <div class="pointer-events-none absolute inset-y-0 left-[10.5rem] right-[16.5rem]">
+              <div class="absolute left-0 top-4 hidden items-center gap-5 text-[10px] tracking-[0.26em] text-white/58">
+                <div class="text-cyanGlow/78"></div>
+                <div id="videoStateBadge" class="text-white/66"></div>
+              </div>
+
+              <div class="absolute left-0 top-14 max-w-[24rem] rounded-[28px] border border-white/8 bg-black/38 px-5 py-4 backdrop-blur-xl shadow-[0_20px_60px_rgba(2,7,18,0.2)]">
+                <p id="missionTitle" class="font-display text-[1.08rem] leading-[1.28] tracking-[0.05em] text-white">Theo dõi tín hiệu tại độ sâu 500m</p>
+                <p id="missionObjective" class="mt-2 text-[13px] leading-5 text-slate-200/92">Đồng bộ camera do thám và xác định đường vào hang dữ liệu.</p>
+                <div class="mt-3 flex items-center gap-3 text-[10px] tracking-[0.22em]">
+                  <div id="feedStatusBadge" class="text-cyanGlow/90">◍ Feed synced</div>
+                  <button id="hudPlayButton" type="button" class="pointer-events-auto text-white/76 transition hover:text-cyanGlow">Pause feed</button>
+                </div>
+              </div>
+
+              <button
+                id="intelAlertButton"
+                type="button"
+                class="pointer-events-auto absolute right-0 top-[19%] rounded-full border border-dangerGlow/20 bg-[linear-gradient(90deg,rgba(255,115,90,0.18),rgba(155,109,255,0.14))] px-4 py-2 text-left shadow-[0_0_26px_rgba(255,115,90,0.12)] transition hover:scale-[1.02]"
+              >
+                <p class="text-[9px] tracking-[0.24em] text-dangerGlow/80">Threat detected</p>
+                <p id="intelAlertLabel" class="mt-1 font-display text-sm tracking-[0.08em] text-white">Leviathan nearby</p>
+              </button>
+
+              <div class="pointer-events-auto absolute bottom-[4.65rem] left-1/2 w-[min(440px,calc(100%-1rem))] -translate-x-1/2">
+                <div id="waypointButtons" class="hidden"></div>
+                <div id="hudInteractionButtons" class="flex items-center justify-center gap-2"></div>
+              </div>
+
+              <div class="pointer-events-auto absolute bottom-3 left-0 w-[260px]">
+                <p id="messageCount" class="hidden text-[10px] tracking-[0.2em] text-white/42">0 tín hiệu cộng đồng</p>
+                <div id="rescueMessages" class="hidden"></div>
+                <form id="rescueForm" class="flex items-center gap-2 rounded-full border border-white/8 bg-black/22 px-3 py-2 backdrop-blur-md">
+                  <label for="rescueInput" class="sr-only">Nhập nhật ký cứu hộ</label>
+                  <input
+                    id="rescueInput"
+                    name="rescueInput"
+                    type="text"
+                    maxlength="120"
+                    placeholder="Gửi tín hiệu..."
+                    class="min-w-0 flex-1 bg-transparent text-sm text-white placeholder:text-slate-500 focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    class="rounded-full bg-cyanGlow/14 px-3 py-1.5 text-[11px] tracking-[0.16em] text-cyanGlow transition hover:bg-cyanGlow/22 hover:text-white"
+                  >
+                    Ping
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <aside id="intelPanel" class="pointer-events-auto absolute right-6 top-8 hidden w-[224px]">
+              <section class="max-h-[calc(100vh-7.25rem)] overflow-hidden rounded-[22px] border border-white/10 bg-[linear-gradient(180deg,rgba(8,21,34,0.82),rgba(8,21,34,0.68))] p-3 backdrop-blur-xl shadow-[0_20px_60px_rgba(2,7,18,0.32)]">
+                <div class="flex items-center justify-between">
+                  <p class="text-[10px] tracking-[0.24em] text-cyanGlow/78">Target intel</p>
+                  <button id="closeIntelButton" type="button" class="text-sm text-white/54 transition hover:text-cyanGlow">✕</button>
+                </div>
+                <div class="mt-2 flex items-center justify-between">
+                  <p id="creatureName" class="font-display text-sm tracking-[0.08em] text-white"></p>
+                  <div id="threatBadge" class="rounded-full border border-dangerGlow/20 bg-dangerGlow/10 px-2.5 py-1 text-[10px] tracking-[0.2em] text-dangerGlow">
+                    Threat
+                  </div>
+                </div>
+                <p id="creatureHabitat" class="mt-1 text-[10px] tracking-[0.18em] text-white/54"></p>
+                <div class="mt-3 overflow-hidden rounded-[16px] border border-white/8 bg-black/16 animate-dangerPulse">
+                  <img id="creatureImage" src="" alt="Sinh vật biển sâu" class="h-[108px] w-full object-cover object-center" />
+                </div>
+                <div class="mt-3 flex flex-wrap items-center gap-2">
+                  <div id="creatureClass" class="rounded-full border border-cyanGlow/12 bg-cyanGlow/8 px-2.5 py-1 text-[10px] tracking-[0.18em] text-cyanGlow">Scanner</div>
+                  <div id="creatureSize" class="rounded-full border border-white/8 bg-white/5 px-2.5 py-1 text-[10px] tracking-[0.16em] text-white/78"></div>
+                  <div id="creatureBehavior" class="rounded-full border border-white/8 bg-white/5 px-2.5 py-1 text-[10px] tracking-[0.16em] text-white/78"></div>
+                </div>
+                <div class="mt-3 rounded-[14px] bg-black/16 px-3 py-2.5">
+                  <p id="creatureSummary" class="text-[11px] leading-5 text-slate-200/88" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">Target locked</p>
+                  <div id="creatureResponse" class="mt-2 space-y-1.5 text-[10px] leading-4 text-slate-300"></div>
+                </div>
+                <div id="creatureList" class="mt-3 grid grid-cols-3 gap-2 overflow-hidden"></div>
+              </section>
+            </aside>
+          </section>
+
+          <div id="videoOverlay" class="pointer-events-none absolute inset-0 flex items-center justify-center bg-abyss-950/25 px-6">
+            <div class="max-w-lg rounded-[28px] border border-cyanGlow/20 bg-black/35 px-6 py-5 text-center backdrop-blur">
+              <p class="font-display text-xs uppercase tracking-[0.35em] text-cyanGlow/80">Video Dock</p>
+              <p id="videoOverlayTitle" class="mt-3 font-display text-lg uppercase tracking-[0.12em] text-white">
+                Feed 500m đã đồng bộ
+              </p>
+              <p id="videoOverlayText" class="mt-3 text-sm leading-6 text-slate-300">
+                Chưa có file video PixVerse trong workspace. Khi bạn gắn clip thật, feed này sẽ phát đúng theo tầng độ sâu đang chọn.
+              </p>
+            </div>
+          </div>
+
+          <div id="sceneTimeline" class="hidden"></div>
+          <div id="systemLog" class="hidden"></div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const generatedImage = (prompt, imageSize = "landscape_16_9") =>
+        `https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=${encodeURIComponent(prompt)}&image_size=${imageSize}`;
+
+      const FINAL_VIDEO_PATH = "assets/pixverse/final/abyssos-main-seekable.mp4";
+      const SCENE_VIDEO_SOURCES = {
+        "shot-01-planetfall": "assets/pixverse/shots/shot-01-planetfall.mp4",
+        "shot-02-ocean-descent": "assets/pixverse/shots/shot-02-ocean-descent.mp4",
+        "shot-03-scan": "assets/pixverse/shots/shot-03-scan.mp4",
+        "shot-04-ruins": "assets/pixverse/shots/shot-04-ruins.mp4",
+        "shot-05-leviathan": "assets/pixverse/shots/shot-05-leviathan.mp4",
+        "shot-06-signal-rise": "assets/pixverse/shots/shot-06-signal-rise.mp4",
+      };
+      const GAME_LIBRARY = [
+        {
+          id: "abyssos",
+          title: "AbyssOS",
+          subtitle: "Deep Research Command",
+          genre: "Sci-Fi | Ocean Survival | Interactive Video",
+          tagline: "Rơi xuống hành tinh đại dương, lặn qua rạn san hô phát quang, quét sự sống lạ và sống sót trước leviathan.",
+          description:
+            "Một demo video-first lấy cảm hứng Subnautica: planetfall, lặn xuống đại dương ngoài hành tinh đầy màu sắc, quét sinh vật và khoáng sản, khám phá tàn tích cổ rồi thoát thân khi leviathan xuất hiện.",
+          status: "Playable Demo",
+          mode: "Interactive Mission",
+          build: "Subsea Build",
+          accent: "cyan",
+          playable: true,
+          price: "Miễn phí",
+          promo: "Mới",
+          categories: ["Tiêu Điểm", "Phiêu Lưu", "Sinh Tồn"],
+          heroImage: generatedImage("sleek exploration craft descending through glowing alien atmosphere over a mysterious ocean planet, cinematic sci-fi, no text, vivid color, realistic", "landscape_16_9"),
+          coverImage: generatedImage("bioluminescent alien ocean world with leviathan silhouette, no text, premium game cover art, cinematic realistic", "portrait_16_9"),
+          tags: ["PixVerse", "Gameplay", "Alien Ocean", "Interactive Video"],
+        },
+        {
+          id: "mechfall",
+          title: "Mechfall Zero",
+          subtitle: "Orbital Breach",
+          genre: "Action | Mech | Roguelite",
+          tagline: "Thả mech xuống tầng khí quyển và dọn sạch vành đai chiến sự ngoài quỹ đạo.",
+          description:
+            "Mock data cho thư viện game, đại diện cho một game hành động tốc độ cao với giao diện hangar đậm chất sci-fi.",
+          status: "Wishlist",
+          mode: "Solo / Endless",
+          build: "Mock Library",
+          accent: "amber",
+          playable: false,
+          price: "312.000d",
+          promo: "-15%",
+          categories: ["Tiêu Điểm", "Chiến Thuật", "Roguelike"],
+          heroImage: generatedImage("cinematic giant mech dropping from orbit into neon battlefield, premium steam game art, realistic science fiction", "landscape_16_9"),
+          coverImage: generatedImage("sleek combat mech with orange atmosphere burn, steam capsule art, realistic", "portrait_16_9"),
+          tags: ["Mech", "Action", "Mock", "Sci-Fi"],
+        },
+        {
+          id: "voidrunner",
+          title: "Voidrunner",
+          subtitle: "Signal Drift",
+          genre: "Horror | Narrative | Space",
+          tagline: "Theo dấu tín hiệu trôi dạt trong trạm không gian bị bỏ hoang.",
+          description:
+            "Mock data cho launcher kiểu Steam, dùng để làm đầy thư viện và tạo cảm giác có nhiều game để chọn.",
+          status: "Coming Soon",
+          mode: "Story Mode",
+          build: "Mock Library",
+          accent: "violet",
+          playable: false,
+          price: "365.000d",
+          promo: "Sắp ra mắt",
+          categories: ["Tiêu Điểm", "Phiêu Lưu", "Nhiều Người Chơi"],
+          heroImage: generatedImage("abandoned space station corridor with glitching holograms and lone astronaut, premium steam art, cinematic realistic", "landscape_16_9"),
+          coverImage: generatedImage("space horror corridor glowing purple, steam capsule art, realistic", "portrait_16_9"),
+          tags: ["Horror", "Narrative", "Mock", "Space"],
+        },
+        {
+          id: "reefkeeper",
+          title: "Reefkeeper",
+          subtitle: "Biolume Frontier",
+          genre: "Relax | Exploration | Ocean",
+          tagline: "Xây dựng trạm nghiên cứu giữa rạn san hô phát quang sinh học.",
+          description:
+            "Mock data cho launcher, mang vibe nhẹ hơn để làm thư viện giống storefront game thật.",
+          status: "Installed",
+          mode: "Sandbox",
+          build: "Mock Library",
+          accent: "teal",
+          playable: false,
+          price: "800.000d",
+          promo: "Bản tiêu chuẩn",
+          categories: ["Tiêu Điểm", "Mô Phỏng", "Sinh Tồn"],
+          heroImage: generatedImage("beautiful underwater research base among glowing coral reef, premium steam game art, realistic bioluminescent ocean", "landscape_16_9"),
+          coverImage: generatedImage("bioluminescent coral reef colony, steam capsule art, realistic underwater", "portrait_16_9"),
+          tags: ["Ocean", "Builder", "Mock", "Relax"],
+        },
+        {
+          id: "iron-eclipse",
+          title: "Iron Eclipse",
+          subtitle: "Frontline Protocol",
+          genre: "Strategy | RTS | War Sim",
+          tagline: "Điều phối hạm đội cơ giới trong chiến dịch hoàng hôn ngoài quỹ đạo.",
+          description:
+            "Mock data cho nhóm chiến thuật, tập trung vào điều binh và kiểm soát chiến trường theo thời gian thực.",
+          status: "Early Access",
+          mode: "RTS Command",
+          build: "Mock Library",
+          accent: "orange",
+          playable: false,
+          price: "455.000d",
+          promo: "-20%",
+          categories: ["Chiến Thuật", "Mô Phỏng", "Tiêu Điểm"],
+          heroImage: generatedImage("futuristic orbital battlefield with fleets and orange war map overlays, premium strategy game art, realistic", "landscape_16_9"),
+          coverImage: generatedImage("orange sci-fi fleet command art, premium strategy game capsule, realistic", "portrait_16_9"),
+          tags: ["RTS", "Fleet", "War", "Mock"],
+        },
+        {
+          id: "verdant-fall",
+          title: "Verdant Fall",
+          subtitle: "Last Green Zone",
+          genre: "Adventure | Survival | Co-op",
+          tagline: "Khám phá thành phố rừng bị bỏ hoang và dựng lại căn cứ cuối cùng.",
+          description:
+            "Mock data cho nhóm phiêu lưu sinh tồn co-op, dùng để lấp đầy storefront và library nhiều màu hơn.",
+          status: "Installed",
+          mode: "Co-op Expedition",
+          build: "Mock Library",
+          accent: "green",
+          playable: false,
+          price: "289.000d",
+          promo: "Co-op",
+          categories: ["Phiêu Lưu", "Sinh Tồn", "Nhiều Người Chơi"],
+          heroImage: generatedImage("lush overgrown futuristic city with explorers and neon survival gear, premium adventure survival game art, realistic", "landscape_16_9"),
+          coverImage: generatedImage("green overgrown sci-fi survival art, premium game capsule, realistic", "portrait_16_9"),
+          tags: ["Adventure", "Co-op", "Survival", "Mock"],
+        },
+      ];
+      const LAUNCHER_CATEGORIES = ["Tiêu Điểm", "Phiêu Lưu", "Chiến Thuật", "Sinh Tồn", "Roguelike", "Mô Phỏng", "Nhiều Người Chơi"];
+      const COMMUNITY_POSTS = [
+        {
+          title: "Rescue Ping / Sector C-77",
+          author: "Orbital Relay",
+          tag: "Rescue",
+          body: "Leviathan response tăng mạnh sau lần scan thứ hai. Khuyến nghị toàn bộ pilot giảm sonar burst và chuyển beacon lên vùng nước sáng.",
+          metric: "218 echoes",
+        },
+        {
+          title: "Discovery Thread / Rainbow Reef",
+          author: "Scout_Arin",
+          tag: "Discovery",
+          body: "Đã phát hiện cụm cobalt, amber và sinh vật prism manta cùng một tuyến scan. Đây là điểm đẹp nhất để demo màu sắc video PixVerse.",
+          metric: "94 upvotes",
+        },
+        {
+          title: "Community Challenge",
+          author: "Trae Deck Ops",
+          tag: "Event",
+          body: "Mục tiêu tuần này: hoàn tất planetfall, ghi lại 1 creature scan và uplink 1 distress ping trong cùng một lượt chơi.",
+          metric: "06 squads",
+        },
+      ];
+      const NEWS_ITEMS = [
+        {
+          title: "Patch 0.9.4 / Subsea Build",
+          summary: "Remap toàn bộ launcher sang flow video-first, tối ưu HUD gameplay và sửa layout ở 100% zoom.",
+          badge: "Patch Notes",
+        },
+        {
+          title: "PixVerse Pipeline Update",
+          summary: "Batch 6 shot đã được render theo vibe Subnautica, ghép thành video chính và sync lại scene map cho web seek.",
+          badge: "Workflow",
+        },
+        {
+          title: "AbyssOS Roadmap",
+          summary: "Bước tiếp theo ưu tiên Community feed thật hơn, reactive video states rõ hơn và chứng minh workflow depth của TRAE.",
+          badge: "Roadmap",
+        },
+      ];
+      const waypointScenes = [
+        { id: "shot-01-planetfall", label: "Planetfall", seekStart: 0, duration: 6 },
+        { id: "shot-02-ocean-descent", label: "Dive", seekStart: 6, duration: 6 },
+        { id: "shot-03-scan", label: "Scan", seekStart: 12, duration: 7 },
+        { id: "shot-04-ruins", label: "Ruins", seekStart: 19, duration: 6 },
+        { id: "shot-05-leviathan", label: "Evade", seekStart: 25, duration: 7 },
+        { id: "shot-06-signal-rise", label: "Signal", seekStart: 32, duration: 7 },
+      ];
+
+      const depthOptions = [
+        {
+          id: "planetfall",
+          depth: "0m",
+          zone: "Khí Quyển Phát Quang",
+          sector: "ORBIT-01",
+          signal: "Tín hiệu bề mặt: Rất mạnh",
+          bio: "Chưa quét",
+          temp: "31.4C",
+          pressure: "01 bar",
+          note: "Tàu đổ bộ xuyên mây ngọc lam, khóa điểm rơi và chuẩn bị đâm xuống bề mặt đại dương.",
+          mission: "Planetfall xuống hành tinh đại dương lạ",
+          objective: "Hoàn tất tiếp cận khí quyển và xác định điểm lao xuống vùng nước an toàn.",
+          poster: generatedImage("compact survival craft descending through turquoise clouds above a bright alien ocean planet, colorful sci-fi, no text, realistic", "landscape_16_9"),
+          videoSrc: FINAL_VIDEO_PATH,
+          sceneId: "shot-01-planetfall",
+          sceneStart: 0,
+        },
+        {
+          id: "scan",
+          depth: "420m",
+          zone: "Đại Dương Cầu Vồng",
+          sector: "SCAN-12",
+          signal: "Tín hiệu sinh học: Dày đặc",
+          bio: "Rất cao",
+          temp: "08.6C",
+          pressure: "37 bar",
+          note: "Rạn san hô cầu vồng dày đặc sự sống, thích hợp quét cá lạ và mạch khoáng sản phát sáng.",
+          mission: "Quét hệ sinh vật và khoáng sản rực màu",
+          objective: "Quét toàn bộ cụm reef, ghi nhận sinh vật phát quang và các nút khoáng sản cobalt, amber, magenta.",
+          poster: generatedImage("first person submersible scan of colorful alien fish coral reef and glowing mineral nodes, bright underwater sci-fi, no text, realistic", "landscape_16_9"),
+          videoSrc: FINAL_VIDEO_PATH,
+          sceneId: "shot-03-scan",
+          sceneStart: 12,
+        },
+        {
+          id: "evade",
+          depth: "1280m",
+          zone: "Tàn Tích Hẻm Vực",
+          sector: "C-77",
+          signal: "Tín hiệu leviathan: Khẩn cấp",
+          bio: "Cực mạnh",
+          temp: "02.1C",
+          pressure: "88 bar",
+          note: "Tàn tích cổ nằm cạnh khe tối nơi leviathan phục kích. Ưu tiên lách khỏi vật cản rồi kéo beacon lên mặt nước.",
+          mission: "Thoát leviathan và phát tín hiệu cứu hộ",
+          objective: "Rời khỏi tàn tích, né cú lao của leviathan và tăng tốc lên tầng nước sáng để uplink beacon.",
+          poster: generatedImage("bioluminescent leviathan attacking a compact submersible near alien underwater ruins, colorful deep sea sci-fi, no text, realistic", "landscape_16_9"),
+          videoSrc: FINAL_VIDEO_PATH,
+          sceneId: "shot-05-leviathan",
+          sceneStart: 25,
+        },
+      ];
+
+      const recipes = [
+        {
+          id: "oxygen",
+          label: "Nâng cấp Oxy",
+          description: "Tăng dung tích bình oxy cho hành trình sâu.",
+          durationMs: 3200,
+          cost: { Titanium: 2, Crystal: 1 },
+          reward: () => {
+            shipStats.oxygen = Math.min(shipStats.oxygen + 8, 100);
+          },
+          success: "Nâng cấp oxy hoàn tất. Dung tích dự trữ đã tăng thêm 8%.",
+        },
+        {
+          id: "hull",
+          label: "Gia cố Vỏ Tàu",
+          description: "Tăng sức chịu áp suất khi xuống hẻm vực.",
+          durationMs: 3800,
+          cost: { Titanium: 2, Alloy: 2 },
+          reward: () => {
+            shipStats.hull = Math.min(shipStats.hull + 10, 100);
+          },
+          success: "Gia cố vỏ tàu xong. Chịu áp suất tăng thêm 10%.",
+        },
+        {
+          id: "cells",
+          label: "Sạc Pin Lõi",
+          description: "Phục hồi năng lượng cho hệ thống quét và đèn pha.",
+          durationMs: 2600,
+          cost: { Cells: 2, Crystal: 1 },
+          reward: () => {
+            shipStats.energy = Math.min(shipStats.energy + 12, 100);
+          },
+          success: "Lõi năng lượng đã được sạc. Nguồn tàu tăng 12%.",
+        },
+      ];
+
+      const creatures = [
+        {
+          id: "helix",
+          name: "Helix Leviathan",
+          threat: "Cực nguy hiểm",
+          classification: "Leviathan",
+          size: "62m",
+          behavior: "Săn đuổi",
+          response: "Ngắt sonar liên tục, hạ tốc độ và lách ngang khỏi trục lao của sinh vật.",
+          actions: ["⚠ Ngắt sonar liên tục", "📉 Hạ tốc độ tối đa", "↩ Lách ngang trục lao"],
+          habitat: "Hẻm vực tối | Sector C-77",
+          summary: "Sinh vật dạng rắn xoắn, thường phản ứng với ánh sáng mạnh và sóng sonar dồn dập. Khi xuất hiện, giảm tốc tàu và tránh quét liên tục.",
+          image: generatedImage("colossal alien sea serpent with glowing golden eyes, spiral body, dark abyssal ocean, bioluminescent sci-fi creature, realistic", "landscape_4_3"),
+        },
+        {
+          id: "manta",
+          name: "Prism Manta",
+          threat: "Nguy hiểm trung bình",
+          classification: "Fauna",
+          size: "11m",
+          behavior: "Lượn đàn",
+          response: "Giữ khoảng cách và quét từ xa để tránh nhiễu ánh sáng trên kính lái.",
+          actions: ["⚠ Tránh tiếp cận trực diện", "📡 Quét từ xa", "◌ Giảm ánh sáng quét chủ động"],
+          habitat: "Rạn neon | Sector A-03",
+          summary: "Cá manta phát quang có khả năng bẻ cong luồng ánh sáng, gây nhiễu camera do thám. Thích hợp thu mẫu từ xa, tránh tiếp cận trực diện.",
+          image: generatedImage("bioluminescent alien manta ray gliding through a neon coral reef, deep sea sci-fi, cinematic realistic", "landscape_4_3"),
+        },
+        {
+          id: "crawler",
+          name: "Ash Crawler",
+          threat: "Nguy hiểm cao",
+          classification: "Predator",
+          size: "4.8m",
+          behavior: "Bám đá",
+          response: "Tăng lực đẩy ngắn và tránh neo gần miệng phun nhiệt khi thân tàu chưa gia cố.",
+          actions: ["⚠ Tránh neo gần miệng phun", "⬡ Tăng lực đẩy ngắn", "↗ Rời khỏi vùng rung chấn"],
+          habitat: "Vực núi lửa | Sector B-12",
+          summary: "Loài săn mồi bám đá gần miệng phun nhiệt. Cảm biến rung động rất nhạy, có thể đeo bám thân tàu nếu vỏ chưa được gia cố.",
+          image: generatedImage("armored deep sea predator crawling near underwater volcanic vents, glowing teal highlights, sci-fi creature design, realistic", "landscape_4_3"),
+        },
+      ];
+
+      const rescueLog = [
+        { author: "Orbital Relay", message: "Đã nhận planetfall. Ưu tiên gửi dữ liệu scan reef và mạch khoáng sản ngay khi hoàn tất chu kỳ quét." },
+        { author: "Scout Drone", message: "Cấu trúc cổ phát xung năng lượng xanh. Nếu có bóng lớn từ khe tối, chuyển ngay sang Evade rồi kéo beacon lên mặt nước." },
+      ];
+
+      const shipStats = { oxygen: 86, hull: 72, energy: 74 };
+
+      const launcherView = document.getElementById("launcherView");
+      const gameView = document.getElementById("gameView");
+      const gameLibraryList = document.getElementById("gameLibraryList");
+      const launcherHeroImage = document.getElementById("launcherHeroImage");
+      const launcherGenre = document.getElementById("launcherGenre");
+      const launcherTitle = document.getElementById("launcherTitle");
+      const launcherTagline = document.getElementById("launcherTagline");
+      const launcherDescription = document.getElementById("launcherDescription");
+      const launcherTags = document.getElementById("launcherTags");
+      const launcherHeroPanel = document.getElementById("launcherHeroPanel");
+      const launcherPrimaryNav = document.getElementById("launcherPrimaryNav");
+      const launcherGenreTabs = document.getElementById("launcherGenreTabs");
+      const storeSectionContent = document.getElementById("storeSectionContent");
+      const librarySectionContent = document.getElementById("librarySectionContent");
+      const communitySectionContent = document.getElementById("communitySectionContent");
+      const newsSectionContent = document.getElementById("newsSectionContent");
+      const librarySectionGrid = document.getElementById("librarySectionGrid");
+      const communityFeed = document.getElementById("communityFeed");
+      const communitySidebar = document.getElementById("communitySidebar");
+      const newsSectionGrid = document.getElementById("newsSectionGrid");
+      const libraryCount = document.getElementById("libraryCount");
+      const launcherStatus = document.getElementById("launcherStatus");
+      const launcherMode = document.getElementById("launcherMode");
+      const launcherBuild = document.getElementById("launcherBuild");
+      const launchGameButton = document.getElementById("launchGameButton");
+      const previewGameButton = document.getElementById("previewGameButton");
+      const featuredGames = document.getElementById("featuredGames");
+      const launcherDeals = document.getElementById("launcherDeals");
+      const launcherAudioHint = document.getElementById("launcherAudioHint");
+      const backToLauncherButton = document.getElementById("backToLauncherButton");
+      const volumeSlider = document.getElementById("volumeSlider");
+
+      const depthButtons = document.getElementById("depthButtons");
+      const radarButton = document.getElementById("radarButton");
+      const radarScope = document.getElementById("radarScope");
+      const radarPingRing = document.getElementById("radarPingRing");
+      const sectorPill = document.getElementById("sectorPill");
+      const missionTitle = document.getElementById("missionTitle");
+      const missionObjective = document.getElementById("missionObjective");
+      const depthStat = document.getElementById("depthStat");
+
+      const missionVideo = document.getElementById("missionVideo");
+      const missionAudio = document.getElementById("missionAudio");
+      const missionAudioSource = missionAudio?.querySelector("source");
+      const hasSeparateMissionAudio = Boolean(missionAudioSource?.getAttribute("src"));
+      const missionVideoSource = document.getElementById("missionVideoSource");
+      const videoOverlay = document.getElementById("videoOverlay");
+      const videoOverlayTitle = document.getElementById("videoOverlayTitle");
+      const videoOverlayText = document.getElementById("videoOverlayText");
+      const videoStateBadge = document.getElementById("videoStateBadge");
+      const feedStatusBadge = document.getElementById("feedStatusBadge");
+      const gameBrandLabel = document.getElementById("gameBrandLabel");
+      const gameBrandTitle = document.getElementById("gameBrandTitle");
+      const audioToggle = document.getElementById("audioToggle");
+      const hudPlayButton = document.getElementById("hudPlayButton");
+      const waypointButtons = document.getElementById("waypointButtons");
+      const hudInteractionButtons = document.getElementById("hudInteractionButtons");
+      const sceneTimeline = document.getElementById("sceneTimeline");
+
+      const oxygenStat = document.getElementById("oxygenStat");
+      const hullStat = document.getElementById("hullStat");
+      const energyStat = document.getElementById("energyStat");
+      const oxygenMeter = document.getElementById("oxygenMeter");
+      const depthMeter = document.getElementById("depthMeter");
+      const hullMeter = document.getElementById("hullMeter");
+      const energyMeter = document.getElementById("energyMeter");
+      const systemLog = document.getElementById("systemLog");
+
+      const creatureList = document.getElementById("creatureList");
+      const creatureImage = document.getElementById("creatureImage");
+      const creatureName = document.getElementById("creatureName");
+      const creatureHabitat = document.getElementById("creatureHabitat");
+      const creatureClass = document.getElementById("creatureClass");
+      const creatureSize = document.getElementById("creatureSize");
+      const creatureBehavior = document.getElementById("creatureBehavior");
+      const creatureResponse = document.getElementById("creatureResponse");
+      const creatureSummary = document.getElementById("creatureSummary");
+      const threatBadge = document.getElementById("threatBadge");
+      const intelPanel = document.getElementById("intelPanel");
+      const intelAlertButton = document.getElementById("intelAlertButton");
+      const intelAlertLabel = document.getElementById("intelAlertLabel");
+      const closeIntelButton = document.getElementById("closeIntelButton");
+
+      const rescueForm = document.getElementById("rescueForm");
+      const rescueInput = document.getElementById("rescueInput");
+      const rescueMessages = document.getElementById("rescueMessages");
+      const messageCount = document.getElementById("messageCount");
+
+      let activeDepth = depthOptions[1].id;
+      let activeCreature = creatures[0].id;
+      let pendingSeekTime = null;
+      let pendingSeekAutoPlay = true;
+      let selectedGameId = GAME_LIBRARY[0].id;
+      let activeLauncherSection = "store";
+      let activeLauncherCategory = "Tiêu Điểm";
+      let intelPanelOpen = false;
+      let radarCycleIndex = Math.max(
+        0,
+        depthOptions.findIndex((item) => item.id === activeDepth)
+      );
+      const audioState = {
+        enabled: false,
+        context: null,
+        masterGain: null,
+        humNodes: [],
+        pingInterval: null,
+        noiseNode: null,
+        noiseGain: null,
+        volume: 0.72,
+      };
+
+      function compactText(text, maxLength = 84) {
+        if (!text) {
+          return "";
+        }
+
+        const singleLine = text.split(".")[0].trim();
+        return singleLine.length <= maxLength ? singleLine : `${singleLine.slice(0, maxLength - 1)}...`;
+      }
+
+      function getAccentColors(accent = "cyan") {
+        const accentMap = {
+          cyan: ["#5ef2ff", "#0f2f46"],
+          amber: ["#f59e0b", "#47280f"],
+          violet: ["#a855f7", "#31124a"],
+          teal: ["#2dd4bf", "#103a36"],
+          orange: ["#fb923c", "#4a2212"],
+          green: ["#4ade80", "#163a20"],
+        };
+
+        return accentMap[accent] || accentMap.cyan;
+      }
+
+      function createFallbackSvg(game, variant = "hero") {
+        const [primary, secondary] = getAccentColors(game.accent);
+        const width = variant === "cover" ? 560 : 1280;
+        const height = variant === "cover" ? 840 : 720;
+        const sceneByGame = {
+          abyssos: `
+            <ellipse cx="${width * 0.68}" cy="${height * 0.52}" rx="${width * 0.18}" ry="${height * 0.12}" fill="rgba(8,16,34,0.9)"/>
+            <rect x="${width * 0.58}" y="${height * 0.48}" width="${width * 0.18}" height="${height * 0.08}" rx="${height * 0.03}" fill="rgba(12,22,44,0.94)"/>
+            <circle cx="${width * 0.72}" cy="${height * 0.51}" r="${height * 0.028}" fill="rgba(255,220,140,0.78)"/>
+            <path d="M${width * 0.12} ${height * 0.8} C ${width * 0.24} ${height * 0.66}, ${width * 0.36} ${height * 0.76}, ${width * 0.5} ${height * 0.64} C ${width * 0.68} ${height * 0.5}, ${width * 0.82} ${height * 0.78}, ${width} ${height * 0.58} L ${width} ${height} L 0 ${height} Z" fill="rgba(3,10,26,0.6)"/>
+            <circle cx="${width * 0.14}" cy="${height * 0.34}" r="${height * 0.034}" fill="rgba(94,242,255,0.7)"/>
+            <circle cx="${width * 0.24}" cy="${height * 0.26}" r="${height * 0.026}" fill="rgba(168,85,247,0.55)"/>
+            <circle cx="${width * 0.3}" cy="${height * 0.42}" r="${height * 0.022}" fill="rgba(45,212,191,0.58)"/>
+          `,
+          mechfall: `
+            <rect x="${width * 0.14}" y="${height * 0.7}" width="${width * 0.72}" height="${height * 0.18}" fill="rgba(18,20,36,0.68)"/>
+            <rect x="${width * 0.46}" y="${height * 0.34}" width="${width * 0.1}" height="${height * 0.2}" rx="${height * 0.025}" fill="rgba(20,28,48,0.92)"/>
+            <rect x="${width * 0.4}" y="${height * 0.4}" width="${width * 0.08}" height="${height * 0.12}" rx="${height * 0.02}" fill="rgba(20,28,48,0.92)"/>
+            <rect x="${width * 0.54}" y="${height * 0.4}" width="${width * 0.08}" height="${height * 0.12}" rx="${height * 0.02}" fill="rgba(20,28,48,0.92)"/>
+            <path d="M${width * 0.46} ${height * 0.54} L ${width * 0.41} ${height * 0.8} L ${width * 0.47} ${height * 0.8} L ${width * 0.52} ${height * 0.58} Z" fill="rgba(15,22,40,0.95)"/>
+            <path d="M${width * 0.56} ${height * 0.54} L ${width * 0.51} ${height * 0.8} L ${width * 0.57} ${height * 0.8} L ${width * 0.62} ${height * 0.58} Z" fill="rgba(15,22,40,0.95)"/>
+            <circle cx="${width * 0.49}" cy="${height * 0.43}" r="${height * 0.014}" fill="rgba(94,242,255,0.7)"/>
+            <circle cx="${width * 0.53}" cy="${height * 0.43}" r="${height * 0.014}" fill="rgba(251,146,60,0.7)"/>
+          `,
+          voidrunner: `
+            <rect x="${width * 0.12}" y="${height * 0.12}" width="${width * 0.76}" height="${height * 0.7}" rx="${height * 0.03}" fill="rgba(7,12,24,0.64)" stroke="rgba(110,140,255,0.18)"/>
+            <rect x="${width * 0.2}" y="${height * 0.2}" width="${width * 0.6}" height="${height * 0.54}" rx="${height * 0.025}" fill="none" stroke="rgba(94,242,255,0.12)"/>
+            <rect x="${width * 0.46}" y="${height * 0.34}" width="${width * 0.08}" height="${height * 0.2}" rx="${height * 0.03}" fill="rgba(210,240,255,0.72)"/>
+            <circle cx="${width * 0.5}" cy="${height * 0.28}" r="${height * 0.04}" fill="rgba(220,245,255,0.78)"/>
+            <rect x="${width * 0.3}" y="${height * 0.28}" width="${width * 0.02}" height="${height * 0.28}" fill="rgba(168,85,247,0.22)"/>
+            <rect x="${width * 0.68}" y="${height * 0.24}" width="${width * 0.02}" height="${height * 0.34}" fill="rgba(94,242,255,0.18)"/>
+          `,
+          reefkeeper: `
+            <path d="M0 ${height * 0.84} C ${width * 0.12} ${height * 0.7}, ${width * 0.3} ${height * 0.82}, ${width * 0.42} ${height * 0.68} C ${width * 0.58} ${height * 0.5}, ${width * 0.74} ${height * 0.82}, ${width} ${height * 0.64} L ${width} ${height} L 0 ${height} Z" fill="rgba(4,14,28,0.62)"/>
+            <circle cx="${width * 0.58}" cy="${height * 0.46}" r="${height * 0.11}" fill="rgba(15,42,56,0.88)"/>
+            <rect x="${width * 0.49}" y="${height * 0.46}" width="${width * 0.18}" height="${height * 0.1}" rx="${height * 0.02}" fill="rgba(15,42,56,0.9)"/>
+            <rect x="${width * 0.42}" y="${height * 0.56}" width="${width * 0.32}" height="${height * 0.03}" rx="${height * 0.01}" fill="rgba(180,245,255,0.22)"/>
+            <path d="M${width * 0.18} ${height * 0.78} Q ${width * 0.16} ${height * 0.54}, ${width * 0.22} ${height * 0.42}" stroke="rgba(45,212,191,0.58)" stroke-width="${Math.max(4, width * 0.006)}" fill="none"/>
+            <path d="M${width * 0.82} ${height * 0.8} Q ${width * 0.86} ${height * 0.58}, ${width * 0.76} ${height * 0.4}" stroke="rgba(94,242,255,0.46)" stroke-width="${Math.max(4, width * 0.006)}" fill="none"/>
+          `,
+          "iron-eclipse": `
+            <circle cx="${width * 0.72}" cy="${height * 0.3}" r="${height * 0.16}" fill="rgba(255,188,120,0.24)"/>
+            <circle cx="${width * 0.72}" cy="${height * 0.3}" r="${height * 0.09}" fill="rgba(255,220,170,0.3)"/>
+            <path d="M${width * 0.12} ${height * 0.66} L ${width * 0.28} ${height * 0.58} L ${width * 0.23} ${height * 0.68} Z" fill="rgba(10,18,34,0.94)"/>
+            <path d="M${width * 0.34} ${height * 0.54} L ${width * 0.48} ${height * 0.48} L ${width * 0.44} ${height * 0.58} Z" fill="rgba(10,18,34,0.88)"/>
+            <rect x="${width * 0.14}" y="${height * 0.2}" width="${width * 0.22}" height="${height * 0.012}" rx="${height * 0.006}" fill="rgba(255,190,120,0.44)"/>
+            <rect x="${width * 0.14}" y="${height * 0.24}" width="${width * 0.16}" height="${height * 0.012}" rx="${height * 0.006}" fill="rgba(94,242,255,0.3)"/>
+            <rect x="${width * 0.14}" y="${height * 0.28}" width="${width * 0.19}" height="${height * 0.012}" rx="${height * 0.006}" fill="rgba(255,255,255,0.18)"/>
+          `,
+          "verdant-fall": `
+            <path d="M0 ${height * 0.82} C ${width * 0.18} ${height * 0.64}, ${width * 0.34} ${height * 0.74}, ${width * 0.52} ${height * 0.62} C ${width * 0.72} ${height * 0.48}, ${width * 0.84} ${height * 0.76}, ${width} ${height * 0.62} L ${width} ${height} L 0 ${height} Z" fill="rgba(10,20,24,0.56)"/>
+            <rect x="${width * 0.18}" y="${height * 0.24}" width="${width * 0.16}" height="${height * 0.38}" fill="rgba(14,28,36,0.48)"/>
+            <rect x="${width * 0.42}" y="${height * 0.18}" width="${width * 0.14}" height="${height * 0.44}" fill="rgba(14,28,36,0.42)"/>
+            <circle cx="${width * 0.24}" cy="${height * 0.26}" r="${height * 0.1}" fill="rgba(74,222,128,0.22)"/>
+            <circle cx="${width * 0.54}" cy="${height * 0.22}" r="${height * 0.12}" fill="rgba(74,222,128,0.18)"/>
+            <circle cx="${width * 0.34}" cy="${height * 0.72}" r="${height * 0.02}" fill="rgba(255,220,170,0.7)"/>
+            <rect x="${width * 0.336}" y="${height * 0.74}" width="${width * 0.008}" height="${height * 0.08}" fill="rgba(20,24,38,0.92)"/>
+          `,
+        };
+        const scene = sceneByGame[game.id] || "";
+        const svg = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+            <defs>
+              <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="${primary}" stop-opacity="0.85"/>
+                <stop offset="100%" stop-color="${secondary}" stop-opacity="0.92"/>
+              </linearGradient>
+              <linearGradient id="beam" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="rgba(255,255,255,0.20)"/>
+                <stop offset="100%" stop-color="rgba(255,255,255,0.02)"/>
+              </linearGradient>
+            </defs>
+            <rect width="100%" height="100%" fill="#04111d"/>
+            <rect width="100%" height="100%" fill="url(#bg)"/>
+            <rect width="100%" height="100%" fill="rgba(3,8,24,0.26)"/>
+            <circle cx="${width * 0.18}" cy="${height * 0.24}" r="${height * 0.18}" fill="rgba(255,255,255,0.10)"/>
+            <circle cx="${width * 0.78}" cy="${height * 0.18}" r="${height * 0.13}" fill="rgba(255,255,255,0.08)"/>
+            <circle cx="${width * 0.54}" cy="${height * 0.72}" r="${height * 0.20}" fill="rgba(255,255,255,0.04)"/>
+            <path d="M0 ${height * 0.82} C ${width * 0.18} ${height * 0.64}, ${width * 0.36} ${height * 0.74}, ${width * 0.5} ${height * 0.7} C ${width * 0.68} ${height * 0.64}, ${width * 0.8} ${height * 0.9}, ${width} ${height * 0.66} L ${width} ${height} L 0 ${height} Z" fill="rgba(2,7,18,0.44)"/>
+            <path d="M${width * 0.12} ${height * 0.72} L ${width * 0.24} ${height * 0.46} L ${width * 0.34} ${height * 0.72} Z" fill="rgba(255,255,255,0.10)"/>
+            <path d="M${width * 0.56} ${height * 0.8} L ${width * 0.72} ${height * 0.42} L ${width * 0.88} ${height * 0.8} Z" fill="rgba(255,255,255,0.08)"/>
+            <rect x="${width * 0.08}" y="${height * 0.1}" width="${width * 0.52}" height="${height * 0.16}" rx="${height * 0.025}" fill="url(#beam)" opacity="0.55"/>
+            <rect x="${width * 0.64}" y="${height * 0.14}" width="${width * 0.18}" height="${height * 0.025}" rx="${height * 0.012}" fill="rgba(255,255,255,0.18)" opacity="0.8"/>
+            ${scene}
+          </svg>
+        `;
+
+        return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+      }
+
+      function getReliableCardArt(game, variant = "hero") {
+        if (variant === "cover") {
+          return game.coverImage || createFallbackSvg(game, "cover");
+        }
+
+        return game.heroImage || createFallbackSvg(game, "hero");
+      }
+
+      function wireImageFallback(image, fallbackSrc) {
+        if (!image) {
+          return;
+        }
+
+        image.addEventListener("error", () => {
+          image.src = fallbackSrc;
+        }, { once: true });
+      }
+
+      function getSelectedGame() {
+        return GAME_LIBRARY.find((game) => game.id === selectedGameId) || GAME_LIBRARY[0];
+      }
+
+      function getFilteredGames() {
+        if (activeLauncherCategory === "Tiêu Điểm") {
+          return GAME_LIBRARY;
+        }
+
+        return GAME_LIBRARY.filter((game) => game.categories.includes(activeLauncherCategory));
+      }
+
+      function syncSelectedGameWithCategory() {
+        const filteredGames = getFilteredGames();
+        if (!filteredGames.length) {
+          selectedGameId = GAME_LIBRARY[0].id;
+          return;
+        }
+
+        if (!filteredGames.some((game) => game.id === selectedGameId)) {
+          selectedGameId = filteredGames[0].id;
+        }
+      }
+
+      async function selectAndOpenGame(gameId) {
+        selectedGameId = gameId;
+        setSelectedGame();
+        await openSelectedGame();
+      }
+
+      function renderPrimaryNav() {
+        [...launcherPrimaryNav.querySelectorAll("button")].forEach((button) => {
+          const isActive = button.dataset.section === activeLauncherSection;
+          button.className = isActive
+            ? "rounded-full border border-cyanGlow/25 bg-[linear-gradient(90deg,rgba(94,242,255,0.16),rgba(168,85,247,0.14))] px-3 py-2 text-[11px] uppercase tracking-[0.28em] text-cyanGlow shadow-[0_0_18px_rgba(94,242,255,0.12)] transition"
+            : "rounded-full px-3 py-2 text-[11px] uppercase tracking-[0.28em] text-slate-300 transition hover:text-cyanGlow";
+        });
+      }
+
+      function renderLauncherSections() {
+        storeSectionContent.classList.toggle("hidden", activeLauncherSection !== "store");
+        librarySectionContent.classList.toggle("hidden", activeLauncherSection !== "library");
+        communitySectionContent.classList.toggle("hidden", activeLauncherSection !== "community");
+        newsSectionContent.classList.toggle("hidden", activeLauncherSection !== "news");
+      }
+
+      function renderCategoryTabs() {
+        launcherGenreTabs.innerHTML = "";
+
+        LAUNCHER_CATEGORIES.forEach((category) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className =
+            category === activeLauncherCategory
+              ? "rounded-full border border-cyanGlow/28 bg-[linear-gradient(90deg,rgba(94,242,255,0.18),rgba(99,102,241,0.14))] px-4 py-2 text-cyanGlow shadow-[0_0_20px_rgba(94,242,255,0.14)]"
+              : "rounded-full border border-transparent px-4 py-2 text-white transition hover:border-cyanGlow/15 hover:bg-white/5 hover:text-cyanGlow";
+          button.textContent = category;
+          button.addEventListener("click", () => {
+            activeLauncherCategory = category;
+            setSelectedGame();
+          });
+          launcherGenreTabs.appendChild(button);
+        });
+      }
+
+      function renderLauncherLibrary() {
+        gameLibraryList.innerHTML = "";
+        const filteredGames = getFilteredGames();
+        libraryCount.textContent = `${String(filteredGames.length).padStart(2, "0")} Games`;
+
+        filteredGames.forEach((game, index) => {
+          const spanClass = index < 2 ? "col-span-12 lg:col-span-6" : "col-span-12 md:col-span-6 xl:col-span-4";
+          const button = document.createElement("button");
+          button.type = "button";
+          button.dataset.gameId = game.id;
+          button.className =
+            game.id === selectedGameId
+              ? `group ${spanClass} overflow-hidden rounded-[24px] border border-cyanGlow/35 bg-[linear-gradient(135deg,rgba(94,242,255,0.12),rgba(99,102,241,0.12))] text-left shadow-intense transition`
+              : `group ${spanClass} overflow-hidden rounded-[24px] border border-cyanGlow/14 bg-[linear-gradient(135deg,rgba(9,15,35,0.8),rgba(35,30,76,0.5))] text-left transition hover:border-cyanGlow/28 hover:bg-cyanGlow/6`;
+          button.innerHTML = `
+            <div class="p-3">
+              <div class="relative overflow-hidden rounded-[18px] border border-white/8 bg-[linear-gradient(180deg,rgba(2,7,18,0.72),rgba(8,21,34,0.58))]">
+                <div class="flex h-[188px] items-center justify-center bg-[radial-gradient(circle_at_top,rgba(94,242,255,0.08),transparent_45%)] p-2">
+                  <img src="${getReliableCardArt(game)}" alt="${game.title}" class="h-full w-full object-contain object-center transition duration-300 group-hover:scale-[1.02]" />
+                </div>
+                <div class="absolute right-3 top-3 rounded-full border border-white/10 bg-[linear-gradient(90deg,rgba(12,18,40,0.84),rgba(37,33,84,0.72))] px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-white/85">
+                ${game.promo}
+                </div>
+              </div>
+
+              <div class="mt-3 flex items-end justify-between gap-3 px-1">
+                <div class="min-w-0">
+                  <p class="font-display text-2xl uppercase tracking-[0.08em] text-white">${game.title}</p>
+                  <p class="mt-2 text-[11px] uppercase tracking-[0.22em] text-cyanGlow">${game.genre}</p>
+                </div>
+                <div class="rounded-[14px] border border-white/10 bg-[linear-gradient(135deg,rgba(5,10,26,0.84),rgba(36,30,82,0.68))] px-3 py-2 text-right">
+                  <p class="text-[10px] uppercase tracking-[0.22em] text-slate-400">${game.status}</p>
+                  <p class="mt-1 font-display text-sm uppercase tracking-[0.12em] text-white">${game.price}</p>
+                </div>
+              </div>
+            </div>
+          `;
+          button.addEventListener("click", () => {
+            selectAndOpenGame(game.id);
+          });
+          wireImageFallback(button.querySelector("img"), createFallbackSvg(game));
+          gameLibraryList.appendChild(button);
+        });
+
+        if (!filteredGames.length) {
+          gameLibraryList.innerHTML = `
+            <div class="col-span-12 rounded-[24px] border border-cyanGlow/15 bg-black/20 p-6 text-sm text-slate-300">
+              Không có game nào trong nhóm ${activeLauncherCategory}. Hãy chọn nhóm khác.
+            </div>
+          `;
+        }
+      }
+
+      function renderFeaturedGames() {
+        featuredGames.innerHTML = "";
+
+        const featuredList = getFilteredGames();
+
+        featuredList.forEach((game) => {
+          const card = document.createElement("div");
+          card.className =
+            game.id === selectedGameId
+              ? "rounded-[22px] border border-cyanGlow/30 bg-[linear-gradient(135deg,rgba(94,242,255,0.12),rgba(99,102,241,0.12))] p-3 shadow-neon"
+              : "rounded-[22px] border border-cyanGlow/14 bg-[linear-gradient(135deg,rgba(9,15,35,0.82),rgba(35,30,76,0.5))] p-3";
+          card.innerHTML = `
+            <div class="flex items-center gap-3">
+              <div class="flex h-[96px] w-[84px] shrink-0 items-center justify-center overflow-hidden rounded-[14px] border border-white/8 bg-[linear-gradient(180deg,rgba(2,7,18,0.74),rgba(8,21,34,0.56))] p-1.5">
+                <img src="${getReliableCardArt(game, "cover")}" alt="${game.title}" class="h-full w-full object-contain object-center" />
+              </div>
+              <div class="min-w-0">
+                <p class="font-display text-sm uppercase tracking-[0.12em] text-white">${game.title}</p>
+                <p class="mt-1 text-[11px] uppercase tracking-[0.22em] text-cyanGlow">${game.status}</p>
+                <p class="mt-2 text-xs text-slate-400">${compactText(game.subtitle, 54)}</p>
+                <p class="mt-2 text-[11px] uppercase tracking-[0.22em] text-white/80">${game.price}</p>
+              </div>
+            </div>
+          `;
+          card.addEventListener("click", () => {
+            selectAndOpenGame(game.id);
+          });
+          card.classList.add("cursor-pointer");
+          wireImageFallback(card.querySelector("img"), createFallbackSvg(game, "cover"));
+          featuredGames.appendChild(card);
+        });
+      }
+
+      function renderLauncherDeals() {
+        launcherDeals.innerHTML = "";
+
+        const filteredGames = getFilteredGames();
+        const fallbackGames = GAME_LIBRARY.filter((game) => !filteredGames.some((item) => item.id === game.id));
+        const dealGames = [...filteredGames, ...fallbackGames].slice(0, 8);
+        dealGames.forEach((game, index) => {
+          const card = document.createElement("button");
+          card.type = "button";
+          card.className =
+            game.id === selectedGameId && index < dealGames.length
+              ? "overflow-hidden rounded-[22px] border border-cyanGlow/30 bg-[linear-gradient(135deg,rgba(94,242,255,0.12),rgba(99,102,241,0.12))] text-left shadow-neon transition"
+              : "overflow-hidden rounded-[22px] border border-cyanGlow/14 bg-[linear-gradient(135deg,rgba(9,15,35,0.82),rgba(35,30,76,0.5))] text-left transition hover:border-cyanGlow/25 hover:bg-cyanGlow/6";
+          card.innerHTML = `
+            <div class="p-3 pb-0">
+              <div class="flex h-[158px] items-center justify-center overflow-hidden rounded-[18px] border border-white/8 bg-[linear-gradient(180deg,rgba(2,7,18,0.72),rgba(8,21,34,0.58))] p-2">
+                <img src="${getReliableCardArt(game)}" alt="${game.title}" class="h-full w-full object-contain object-center" />
+              </div>
+            </div>
+            <div class="flex items-center justify-between gap-3 p-3">
+              <div class="min-w-0">
+                <p class="font-display text-sm uppercase tracking-[0.12em] text-white">${game.title}</p>
+                <p class="mt-1 text-[11px] uppercase tracking-[0.22em] text-cyanGlow">${game.promo}</p>
+              </div>
+              <p class="font-display text-sm uppercase tracking-[0.12em] text-white">${game.price}</p>
+            </div>
+          `;
+          card.addEventListener("click", () => {
+            selectAndOpenGame(game.id);
+          });
+          wireImageFallback(card.querySelector("img"), createFallbackSvg(game));
+          launcherDeals.appendChild(card);
+        });
+      }
+
+      function renderLibrarySection() {
+        librarySectionGrid.innerHTML = "";
+        const libraryGames = GAME_LIBRARY.filter((game) => game.playable || game.status === "Installed");
+
+        libraryGames.forEach((game) => {
+          const card = document.createElement("article");
+          card.className =
+            "overflow-hidden rounded-[24px] border border-cyanGlow/18 bg-[linear-gradient(135deg,rgba(10,18,40,0.92),rgba(31,36,86,0.7))] p-4 shadow-neon";
+          card.innerHTML = `
+            <div class="flex items-center gap-4">
+              <div class="flex h-[110px] w-[96px] shrink-0 items-center justify-center overflow-hidden rounded-[16px] border border-white/8 bg-black/20 p-2">
+                <img src="${getReliableCardArt(game, "cover")}" alt="${game.title}" class="h-full w-full object-contain object-center" />
+              </div>
+              <div class="min-w-0 flex-1">
+                <p class="font-display text-lg uppercase tracking-[0.08em] text-white">${game.title}</p>
+                <p class="mt-1 text-[11px] uppercase tracking-[0.22em] text-cyanGlow">${game.status}</p>
+                <p class="mt-3 text-sm leading-6 text-slate-300">${compactText(game.description, 130)}</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                  <button data-open-game="${game.id}" class="rounded-full border border-cyanGlow/24 bg-cyanGlow/10 px-4 py-2 text-[11px] uppercase tracking-[0.22em] text-cyanGlow transition hover:bg-cyanGlow/16">${game.playable ? "Play Demo" : "Open Mock"}</button>
+                  <button data-focus-game="${game.id}" class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] uppercase tracking-[0.22em] text-white/80 transition hover:border-cyanGlow/24 hover:text-cyanGlow">Focus Card</button>
+                </div>
+              </div>
+            </div>
+          `;
+          wireImageFallback(card.querySelector("img"), createFallbackSvg(game, "cover"));
+          card.querySelector('[data-open-game]').addEventListener("click", async () => {
+            await selectAndOpenGame(game.id);
+          });
+          card.querySelector('[data-focus-game]').addEventListener("click", () => {
+            selectedGameId = game.id;
+            activeLauncherSection = "store";
+            setSelectedGame();
+          });
+          librarySectionGrid.appendChild(card);
+        });
+      }
+
+      function renderCommunitySection() {
+        communityFeed.innerHTML = "";
+        communitySidebar.innerHTML = "";
+
+        COMMUNITY_POSTS.forEach((post) => {
+          const card = document.createElement("article");
+          card.className =
+            "rounded-[24px] border border-cyanGlow/18 bg-[linear-gradient(135deg,rgba(10,18,40,0.92),rgba(31,36,86,0.7))] p-5 shadow-neon";
+          card.innerHTML = `
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <p class="font-display text-sm uppercase tracking-[0.24em] text-white">${post.title}</p>
+                <p class="mt-2 text-[11px] uppercase tracking-[0.22em] text-cyanGlow">${post.author}</p>
+              </div>
+              <div class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-white/78">${post.tag}</div>
+            </div>
+            <p class="mt-4 text-sm leading-7 text-slate-300">${post.body}</p>
+            <div class="mt-4 text-[11px] uppercase tracking-[0.22em] text-slate-500">${post.metric}</div>
+          `;
+          communityFeed.appendChild(card);
+        });
+
+        communitySidebar.innerHTML = `
+          <div class="rounded-[24px] border border-cyanGlow/18 bg-[linear-gradient(135deg,rgba(10,18,40,0.92),rgba(31,36,86,0.7))] p-5 shadow-neon">
+            <p class="font-display text-xs uppercase tracking-[0.42em] text-cyanGlow/80">Live Objectives</p>
+            <div class="mt-4 grid gap-3 text-sm text-slate-300">
+              <div class="rounded-[18px] border border-white/10 bg-white/5 px-4 py-3">Complete 1 creature scan from the gameplay HUD</div>
+              <div class="rounded-[18px] border border-white/10 bg-white/5 px-4 py-3">Trigger distress ping and uplink signal scene</div>
+              <div class="rounded-[18px] border border-white/10 bg-white/5 px-4 py-3">Show TRAE workflow: prompts, shots, concat, web sync</div>
+            </div>
+          </div>
+          <div class="rounded-[24px] border border-cyanGlow/18 bg-[linear-gradient(135deg,rgba(10,18,40,0.92),rgba(31,36,86,0.7))] p-5 shadow-neon">
+            <p class="font-display text-xs uppercase tracking-[0.42em] text-cyanGlow/80">Why It Scores</p>
+            <div class="mt-4 space-y-3 text-sm leading-6 text-slate-300">
+              <p>Beyond playback: action buttons drive scene jumps and HUD state.</p>
+              <p>Community engagement: rescue log + feed + challenge thread.</p>
+              <p>Workflow depth: PixVerse generation, scene map, automation, integration.</p>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderNewsSection() {
+        newsSectionGrid.innerHTML = "";
+        NEWS_ITEMS.forEach((item) => {
+          const card = document.createElement("article");
+          card.className =
+            "rounded-[24px] border border-cyanGlow/18 bg-[linear-gradient(135deg,rgba(10,18,40,0.92),rgba(31,36,86,0.7))] p-5 shadow-neon";
+          card.innerHTML = `
+            <div class="rounded-full border border-cyanGlow/20 bg-cyanGlow/10 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-cyanGlow inline-flex">${item.badge}</div>
+            <p class="mt-4 font-display text-lg uppercase tracking-[0.08em] text-white">${item.title}</p>
+            <p class="mt-4 text-sm leading-7 text-slate-300">${item.summary}</p>
+          `;
+          newsSectionGrid.appendChild(card);
+        });
+      }
+
+      function setSelectedGame() {
+        syncSelectedGameWithCategory();
+        const game = getSelectedGame();
+
+        launcherHeroImage.src = game.heroImage;
+        wireImageFallback(launcherHeroImage, createFallbackSvg(game));
+        launcherGenre.textContent = game.genre;
+        launcherTitle.textContent = game.title;
+        launcherTagline.textContent = game.tagline;
+        launcherDescription.textContent = game.description;
+        launcherStatus.textContent = game.status;
+        launcherMode.textContent = game.mode;
+        launcherBuild.textContent = game.build;
+        launcherAudioHint.textContent =
+          activeLauncherCategory === "Tiêu Điểm"
+            ? game.playable
+              ? "Nhấn Play để kích hoạt ambient + HUD audio."
+              : "Game này là mock data. Bạn vẫn có thể mở giao diện demo để xem flow."
+            : `Đang lọc theo nhóm ${activeLauncherCategory}. Chọn card để đổi hero và trạng thái launcher.`;
+
+        launchGameButton.textContent = game.playable ? "Play" : "Open Mock";
+        previewGameButton.textContent = game.playable ? "Preview" : "View Capsule";
+
+        launcherTags.innerHTML = "";
+        game.tags.forEach((tag) => {
+          const chip = document.createElement("span");
+          chip.className = "rounded-full border border-cyanGlow/15 bg-black/20 px-3 py-2 text-[11px] uppercase tracking-[0.24em] text-cyanGlow";
+          chip.textContent = tag;
+          launcherTags.appendChild(chip);
+        });
+
+        renderPrimaryNav();
+        renderLauncherSections();
+        renderCategoryTabs();
+        renderLauncherLibrary();
+        renderFeaturedGames();
+        renderLauncherDeals();
+        renderLibrarySection();
+        renderCommunitySection();
+        renderNewsSection();
+      }
+
+      function ensureHudAudio() {
+        if (audioState.context) {
+          return audioState.context;
+        }
+
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) {
+          return null;
+        }
+
+        const context = new AudioContextClass();
+        const masterGain = context.createGain();
+        masterGain.gain.value = 0;
+        masterGain.connect(context.destination);
+
+        const lowHum = context.createOscillator();
+        lowHum.type = "sine";
+        lowHum.frequency.value = 48;
+
+        const highHum = context.createOscillator();
+        highHum.type = "triangle";
+        highHum.frequency.value = 96;
+
+        const humGain = context.createGain();
+        humGain.gain.value = 0.035;
+
+        lowHum.connect(humGain);
+        highHum.connect(humGain);
+        humGain.connect(masterGain);
+
+        lowHum.start();
+        highHum.start();
+
+        const bufferSize = context.sampleRate * 2;
+        const noiseBuffer = context.createBuffer(1, bufferSize, context.sampleRate);
+        const channel = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i += 1) {
+          channel[i] = (Math.random() * 2 - 1) * 0.25;
+        }
+
+        const noiseSource = context.createBufferSource();
+        noiseSource.buffer = noiseBuffer;
+        noiseSource.loop = true;
+
+        const noiseFilter = context.createBiquadFilter();
+        noiseFilter.type = "lowpass";
+        noiseFilter.frequency.value = 420;
+
+        const noiseGain = context.createGain();
+        noiseGain.gain.value = 0.012;
+
+        noiseSource.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(masterGain);
+        noiseSource.start();
+
+        audioState.context = context;
+        audioState.masterGain = masterGain;
+        audioState.humNodes = [lowHum, highHum, humGain];
+        audioState.noiseNode = noiseSource;
+        audioState.noiseGain = noiseGain;
+        return context;
+      }
+
+      function playHudBeep(kind = "tap") {
+        if (!audioState.enabled || !audioState.context || !audioState.masterGain) {
+          return;
+        }
+
+        const context = audioState.context;
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
+        const start = context.currentTime;
+        const duration = kind === "alert" ? 0.22 : 0.12;
+
+        oscillator.type = kind === "success" ? "triangle" : "sine";
+        oscillator.frequency.setValueAtTime(kind === "alert" ? 220 : kind === "success" ? 660 : 440, start);
+        oscillator.frequency.exponentialRampToValueAtTime(kind === "alert" ? 110 : 880, start + duration);
+
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.exponentialRampToValueAtTime(kind === "alert" ? 0.08 : 0.05, start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+
+        oscillator.connect(gain);
+        gain.connect(audioState.masterGain);
+        oscillator.start(start);
+        oscillator.stop(start + duration);
+      }
+
+      function scheduleSonarPing() {
+        if (!audioState.enabled || !audioState.context) {
+          return;
+        }
+
+        window.clearInterval(audioState.pingInterval);
+        audioState.pingInterval = window.setInterval(() => {
+          playHudBeep("alert");
+        }, 4800);
+      }
+
+      function syncMissionAudio(force = false) {
+        if (!missionAudio || !hasSeparateMissionAudio || !audioState.enabled) {
+          return;
+        }
+
+        const delta = Math.abs((missionAudio.currentTime || 0) - (missionVideo.currentTime || 0));
+        if (force || delta > 0.35) {
+          try {
+            missionAudio.currentTime = missionVideo.currentTime || 0;
+          } catch (error) {
+            // Ignore sync jumps before metadata is available.
+          }
+        }
+      }
+
+      async function setAudioEnabled(enabled) {
+        const context = ensureHudAudio();
+        audioState.enabled = enabled && Boolean(context);
+
+        if (context && context.state === "suspended") {
+          await context.resume();
+        }
+
+        if (audioState.masterGain) {
+          audioState.masterGain.gain.cancelScheduledValues(0);
+          audioState.masterGain.gain.setTargetAtTime(audioState.enabled ? 0.36 * audioState.volume : 0.0001, audioState.context.currentTime, 0.12);
+        }
+
+        missionVideo.muted = !audioState.enabled;
+        missionVideo.volume = audioState.enabled ? Math.max(audioState.volume, 0.35) : 0;
+        missionAudio.volume = hasSeparateMissionAudio && audioState.enabled ? Math.max(audioState.volume, 0.45) : 0;
+        audioToggle.textContent = audioState.enabled ? "🔊" : "🔇";
+        audioToggle.setAttribute("aria-label", audioState.enabled ? "Audio On" : "Audio Off");
+
+        if (audioState.enabled) {
+          scheduleSonarPing();
+          syncMissionAudio(true);
+          if (hasSeparateMissionAudio) {
+            missionAudio.play().catch(() => {});
+          }
+          playHudBeep("success");
+          missionVideo.play().catch(() => {});
+        } else {
+          window.clearInterval(audioState.pingInterval);
+          if (hasSeparateMissionAudio) {
+            missionAudio.pause();
+          }
+        }
+      }
+
+      function updateVolume(nextValue) {
+        audioState.volume = nextValue;
+        if (audioState.masterGain && audioState.context) {
+          audioState.masterGain.gain.setTargetAtTime(audioState.enabled ? 0.36 * audioState.volume : 0.0001, audioState.context.currentTime, 0.1);
+        }
+        missionVideo.volume = audioState.enabled ? Math.max(audioState.volume, 0.35) : 0;
+        missionAudio.volume = hasSeparateMissionAudio && audioState.enabled ? Math.max(audioState.volume, 0.45) : 0;
+      }
+
+      async function openSelectedGame() {
+        const game = getSelectedGame();
+        gameBrandLabel.textContent = game.title;
+        gameBrandTitle.textContent = game.subtitle;
+        launcherView.classList.add("hidden");
+        gameView.classList.remove("hidden");
+        closeIntelPanel();
+        if (hasSeparateMissionAudio) {
+          missionAudio.load();
+        }
+        await setAudioEnabled(true);
+        syncMissionAudio(true);
+        if (hasSeparateMissionAudio) {
+          missionAudio.play().catch(() => {});
+        }
+        missionVideo.play().catch(() => {});
+      }
+
+      function closeToLauncher() {
+        gameView.classList.add("hidden");
+        launcherView.classList.remove("hidden");
+        closeIntelPanel();
+        missionVideo.pause();
+        if (hasSeparateMissionAudio) {
+          missionAudio.pause();
+        }
+        setAudioEnabled(false);
+        gameBrandLabel.textContent = "AbyssOS";
+        gameBrandTitle.textContent = "Deep Research Command";
+      }
+
+      function renderShipStats() {
+        const oxygenUnits = Math.round((shipStats.oxygen / 100) * 150);
+        const depthConfig = depthOptions.find((item) => item.id === activeDepth);
+        const depthValue = Number.parseInt(depthConfig?.depth || "0", 10) || 0;
+        oxygenStat.textContent = `${oxygenUnits}/150`;
+        hullStat.textContent = `${shipStats.hull}%`;
+        energyStat.textContent = `${shipStats.energy}%`;
+        oxygenMeter.style.width = `${shipStats.oxygen}%`;
+        hullMeter.style.width = `${shipStats.hull}%`;
+        energyMeter.style.width = `${shipStats.energy}%`;
+        depthMeter.style.width = `${Math.min((depthValue / 2000) * 100, 100)}%`;
+      }
+
+      function openIntelPanel() {
+        intelPanelOpen = true;
+        intelPanel.classList.remove("hidden");
+        intelAlertButton.classList.add("hidden");
+      }
+
+      function closeIntelPanel() {
+        intelPanelOpen = false;
+        intelPanel.classList.add("hidden");
+        intelAlertButton.classList.remove("hidden");
+      }
+
+      function pulseRadar() {
+        radarScope.classList.add("scale-[1.04]", "drop-shadow-[0_0_18px_rgba(0,216,255,0.35)]");
+        radarPingRing.classList.add("border-cyanGlow/55");
+        window.setTimeout(() => {
+          radarScope.classList.remove("scale-[1.04]", "drop-shadow-[0_0_18px_rgba(0,216,255,0.35)]");
+          radarPingRing.classList.remove("border-cyanGlow/55");
+        }, 520);
+      }
+
+      function appendSystemLog(message, tone = "default") {
+        const toneClasses =
+          tone === "success"
+            ? "border-tealGlow/20 bg-tealGlow/10 text-teal-100"
+            : tone === "warning"
+              ? "border-warning/20 bg-warning/10 text-amber-100"
+              : "border-white/5 bg-white/5 text-slate-300";
+
+        const entry = document.createElement("div");
+        entry.className = `rounded-2xl border px-3 py-3 text-sm ${toneClasses}`;
+        entry.textContent = message;
+        systemLog.prepend(entry);
+
+        while (systemLog.children.length > 5) {
+          systemLog.removeChild(systemLog.lastChild);
+        }
+      }
+
+      function updateFeed(depthConfig) {
+        missionVideo.pause();
+        missionVideo.setAttribute("poster", depthConfig.poster);
+
+        if (depthConfig.videoSrc) {
+          if (missionVideoSource.getAttribute("src") !== depthConfig.videoSrc) {
+            missionVideoSource.src = depthConfig.videoSrc;
+            missionVideo.load();
+          }
+          videoOverlay.classList.add("hidden");
+          videoStateBadge.textContent = "◉ Main Video";
+          feedStatusBadge.textContent = "◍ Feed Synced";
+          hudPlayButton.textContent = missionVideo.paused ? "▶ Resume" : "❚❚ Pause";
+          missionVideo.play().catch(() => {});
+        } else {
+          missionVideoSource.removeAttribute("src");
+          missionVideo.load();
+          videoOverlay.classList.remove("hidden");
+          videoOverlayTitle.textContent = `Feed ${depthConfig.depth} đã đồng bộ`;
+          videoOverlayText.textContent =
+            "Chưa có file video PixVerse trong workspace. Khi bạn gắn clip thật, feed này sẽ phát đúng theo tầng độ sâu đang chọn.";
+          videoStateBadge.textContent = "◎ Awaiting Clip";
+          feedStatusBadge.textContent = "◌ Feed Synced";
+        }
+      }
+
+      function playVideoSource(videoSrc, startTime = 0, autoPlay = true) {
+        pendingSeekTime = startTime;
+        pendingSeekAutoPlay = autoPlay;
+
+        if (!videoSrc) {
+          return;
+        }
+
+        const currentSrc = missionVideoSource.getAttribute("src");
+        if (currentSrc !== videoSrc) {
+          missionVideo.pause();
+          missionVideoSource.src = videoSrc;
+          missionVideo.load();
+          return;
+        }
+
+        if (missionVideo.readyState >= 2) {
+          flushPendingSeek();
+          return;
+        }
+
+        missionVideo.load();
+      }
+
+      function performVideoSeek(seconds, autoPlay = true) {
+        const duration = Number.isFinite(missionVideo.duration) && missionVideo.duration > 0 ? missionVideo.duration : seconds;
+        const target = Math.min(Math.max(seconds, 0), Math.max(duration - 0.1, 0));
+        missionVideo.pause();
+
+        const resumePlayback = () => {
+          if (autoPlay) {
+            missionVideo.play().catch(() => {});
+          }
+        };
+
+        try {
+          if (typeof missionVideo.fastSeek === "function") {
+            missionVideo.fastSeek(target);
+          } else {
+            missionVideo.currentTime = target;
+          }
+        } catch (_error) {
+          missionVideo.currentTime = target;
+        }
+
+        if (missionVideo.seeking) {
+          missionVideo.addEventListener("seeked", resumePlayback, { once: true });
+        } else {
+          window.setTimeout(resumePlayback, 90);
+        }
+      }
+
+      function flushPendingSeek() {
+        if (pendingSeekTime === null) {
+          return;
+        }
+
+        if (!missionVideoSource.getAttribute("src")) {
+          return;
+        }
+
+        if (missionVideo.readyState < 2) {
+          return;
+        }
+
+        const targetSeconds = pendingSeekTime;
+        const targetAutoPlay = pendingSeekAutoPlay;
+        pendingSeekTime = null;
+        performVideoSeek(targetSeconds, targetAutoPlay);
+      }
+
+      function jumpToTime(seconds, autoPlay = true) {
+        pendingSeekTime = seconds;
+        pendingSeekAutoPlay = autoPlay;
+
+        if (!missionVideoSource.getAttribute("src")) {
+          return;
+        }
+
+        if (missionVideo.readyState >= 2) {
+          flushPendingSeek();
+          return;
+        }
+
+        missionVideo.load();
+      }
+
+      function getSceneUiMeta(sceneId) {
+        const sceneMeta = {
+          "shot-03-scan": { order: 0, label: "Scan", tier: "primary", hint: "Primary" },
+          "shot-02-ocean-descent": { order: 1, label: "Dive", tier: "secondary", hint: "Move" },
+          "shot-06-signal-rise": { order: 2, label: "Signal", tier: "secondary", hint: "Beacon" },
+          "shot-05-leviathan": { order: 3, label: "Evade", tier: "danger", hint: "Threat" },
+          "shot-01-planetfall": { order: 4, label: "Planetfall", tier: "utility", hint: "Entry" },
+          "shot-04-ruins": { order: 5, label: "Ruins", tier: "utility", hint: "Intel" },
+        };
+
+        return sceneMeta[sceneId] || { order: 99, label: "Action", tier: "utility", hint: "Scene" };
+      }
+
+      function getWaypointButtonClass(sceneId, isActive = false) {
+        const meta = getSceneUiMeta(sceneId);
+        const baseClass = "rounded-[18px] px-3 py-3 text-left backdrop-blur-xl transition";
+
+        if (meta.tier === "primary") {
+          return isActive
+            ? `${baseClass} border border-cyanGlow/55 bg-cyanGlow/22 shadow-[0_0_24px_rgba(0,216,255,0.26)]`
+            : `${baseClass} border border-cyanGlow/28 bg-black/26 hover:border-cyanGlow/48 hover:bg-cyanGlow/12`;
+        }
+
+        if (meta.tier === "danger") {
+          return isActive
+            ? `${baseClass} border border-dangerGlow/55 bg-dangerGlow/18 shadow-[0_0_24px_rgba(255,115,90,0.22)]`
+            : `${baseClass} border border-dangerGlow/20 bg-black/22 hover:border-dangerGlow/40 hover:bg-dangerGlow/10`;
+        }
+
+        if (meta.tier === "secondary") {
+          return isActive
+            ? `${baseClass} border border-white/34 bg-white/12 shadow-[0_0_18px_rgba(255,255,255,0.12)]`
+            : `${baseClass} border border-white/12 bg-black/20 hover:border-cyanGlow/24 hover:bg-white/6`;
+        }
+
+        return isActive
+          ? `${baseClass} border border-violet-400/45 bg-violet-400/16 shadow-[0_0_18px_rgba(155,109,255,0.18)]`
+          : `${baseClass} border border-white/10 bg-black/18 hover:border-violet-400/30 hover:bg-violet-400/8`;
+      }
+
+      function getDepthButtonClass(isActive = false) {
+        return isActive
+          ? "group relative block w-full border-l border-cyanGlow/55 pl-5 pr-2 py-1 text-left opacity-100"
+          : "group relative block w-full border-l border-white/10 pl-5 pr-2 py-1 text-left opacity-56 transition hover:opacity-100";
+      }
+
+      function jumpToScene(sceneId, autoPlay = true) {
+        const scene = waypointScenes.find((item) => item.id === sceneId);
+        if (!scene) {
+          return;
+        }
+
+        const sceneVideoSrc = SCENE_VIDEO_SOURCES[sceneId];
+        if (sceneVideoSrc) {
+          playVideoSource(sceneVideoSrc, 0, autoPlay);
+        } else {
+          playVideoSource(FINAL_VIDEO_PATH, scene.seekStart, autoPlay);
+        }
+        playHudBeep("tap");
+        appendSystemLog(
+          sceneVideoSrc
+            ? `Video chính đã chuyển sang phân cảnh ${scene.label}.`
+            : `Video chính đã nhảy tới phân cảnh ${scene.label} tại mốc ${scene.seekStart}s.`,
+          "default"
+        );
+
+        [...waypointButtons.children].forEach((button) => {
+          const isActive = button.dataset.sceneId === sceneId;
+          button.className = getWaypointButtonClass(button.dataset.sceneId, isActive);
+        });
+
+        [...sceneTimeline.children].forEach((button) => {
+          const isActive = button.dataset.sceneId === sceneId;
+          button.className = isActive
+            ? "rounded-2xl border border-cyanGlow/40 bg-cyanGlow/15 px-3 py-3 text-left shadow-neon transition"
+            : "rounded-2xl border border-cyanGlow/12 bg-white/5 px-3 py-3 text-left transition hover:border-cyanGlow/30 hover:bg-cyanGlow/10";
+        });
+      }
+
+      function setActiveDepth(depthId) {
+        const depthConfig = depthOptions.find((item) => item.id === depthId);
+        if (!depthConfig) {
+          return;
+        }
+
+        activeDepth = depthId;
+        radarCycleIndex = Math.max(
+          0,
+          depthOptions.findIndex((item) => item.id === depthId)
+        );
+        depthStat.textContent = depthConfig.depth;
+        sectorPill.textContent = depthConfig.sector;
+        missionTitle.textContent = depthConfig.mission;
+        missionObjective.textContent = depthConfig.objective;
+        updateFeed(depthConfig);
+        if (depthConfig.sceneId) {
+          jumpToScene(depthConfig.sceneId, true);
+        }
+        playHudBeep("tap");
+
+        [...depthButtons.children].forEach((button) => {
+          const isActive = button.dataset.depthId === depthId;
+          button.className = getDepthButtonClass(isActive);
+        });
+
+        appendSystemLog(`Radar đã chuyển sang ${depthConfig.depth} | ${depthConfig.zone}. Feed camera đã đồng bộ theo nhiệm vụ.`, "warning");
+      }
+
+      function renderDepthButtons() {
+        depthButtons.innerHTML = "";
+
+        depthOptions.forEach((item) => {
+          const tone =
+            item.id === "reef"
+              ? {
+                  border: "border-tealGlow/25",
+                  bg: "bg-tealGlow/10",
+                  hover: "hover:border-tealGlow/40 hover:bg-tealGlow/15",
+                  dot: "bg-tealGlow",
+                }
+              : item.id === "volcanic"
+                ? {
+                    border: "border-cyanGlow/25",
+                    bg: "bg-cyanGlow/10",
+                    hover: "hover:border-cyanGlow/40 hover:bg-cyanGlow/15",
+                    dot: "bg-cyanGlow",
+                  }
+                : {
+                    border: "border-violet-400/30",
+                    bg: "bg-violet-500/10",
+                    hover: "hover:border-violet-400/45 hover:bg-violet-500/15",
+                    dot: "bg-violet-400",
+                  };
+
+          const button = document.createElement("button");
+          button.type = "button";
+          button.dataset.depthId = item.id;
+          button.className = getDepthButtonClass(item.id === activeDepth);
+          button.innerHTML = `
+            <span class="absolute left-[-4px] top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full ${tone.dot} shadow-[0_0_12px_rgba(94,242,255,0.55)]"></span>
+            <p class="font-display text-base leading-none tracking-[0.06em] text-white">${item.depth}</p>
+            <p class="mt-1 text-[10px] leading-4 text-white/54">${item.zone}</p>
+          `;
+          button.addEventListener("click", () => setActiveDepth(item.id));
+          depthButtons.appendChild(button);
+        });
+      }
+
+      function renderWaypointButtons() {
+        waypointButtons.innerHTML = "";
+        const activeSceneId = depthOptions.find((item) => item.id === activeDepth)?.sceneId || waypointScenes[0].id;
+
+        [...waypointScenes]
+          .sort((a, b) => getSceneUiMeta(a.id).order - getSceneUiMeta(b.id).order)
+          .forEach((scene) => {
+          const meta = getSceneUiMeta(scene.id);
+          const button = document.createElement("button");
+          button.type = "button";
+          button.dataset.sceneId = scene.id;
+          button.className = getWaypointButtonClass(scene.id, scene.id === activeSceneId);
+          button.innerHTML = `
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-[9px] tracking-[0.18em] text-white/54">${meta.hint}</p>
+              <p class="text-[9px] tracking-[0.18em] text-cyanGlow/88">${String(scene.seekStart).padStart(2, "0")}s</p>
+            </div>
+            <p class="mt-1 font-display text-sm tracking-[0.06em] text-white">${meta.label}</p>
+          `;
+          button.addEventListener("click", () => jumpToScene(scene.id, true));
+          waypointButtons.appendChild(button);
+        });
+      }
+
+      function renderHudInteractionButtons() {
+        hudInteractionButtons.innerHTML = "";
+
+        const actions = [
+          {
+            id: "sonar",
+            label: "Sonar Pulse",
+            icon: "◎",
+            handler: () => {
+              pulseRadar();
+              jumpToScene("shot-03-scan", true);
+              appendSystemLog("Đã phát sonar pulse để quét cụm reef hiện tại.", "success");
+            },
+          },
+          {
+            id: "ping",
+            label: "Distress Ping",
+            icon: "↗",
+            handler: () => {
+              jumpToScene("shot-06-signal-rise", true);
+              rescueLog.unshift({ author: "Field Operator", message: "Phát distress ping tới relay quỹ đạo." });
+              renderRescueMessages();
+              appendSystemLog("Đã gửi distress ping tới relay ngoài quỹ đạo.", "warning");
+            },
+          },
+          {
+            id: "threat",
+            label: "Threat Lock",
+            icon: "⚠",
+            handler: () => {
+              jumpToScene("shot-05-leviathan", true);
+              setActiveCreature("helix");
+            },
+          },
+        ];
+
+        actions.forEach((action) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className =
+            action.id === "threat"
+              ? "rounded-full border border-dangerGlow/20 bg-black/24 px-4 py-2 text-left backdrop-blur-xl transition hover:border-dangerGlow/40 hover:bg-dangerGlow/10"
+              : "rounded-full border border-white/10 bg-black/24 px-4 py-2 text-left backdrop-blur-xl transition hover:border-cyanGlow/28 hover:bg-cyanGlow/8";
+          button.innerHTML = `
+            <div class="flex items-center gap-2">
+              <span class="${action.id === "threat" ? "text-dangerGlow" : "text-cyanGlow"}">${action.icon}</span>
+              <span class="text-[11px] tracking-[0.16em] text-white/86">${action.label}</span>
+            </div>
+          `;
+          button.addEventListener("click", action.handler);
+          hudInteractionButtons.appendChild(button);
+        });
+      }
+
+      function renderSceneTimeline() {
+        sceneTimeline.innerHTML = "";
+
+        waypointScenes.forEach((scene, index) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.dataset.sceneId = scene.id;
+          button.className =
+            "rounded-2xl border border-cyanGlow/12 bg-white/5 px-3 py-3 text-left transition hover:border-cyanGlow/30 hover:bg-cyanGlow/10";
+          button.innerHTML = `
+            <p class="text-[11px] uppercase tracking-[0.3em] text-slate-400">Shot ${index + 1}</p>
+            <p class="mt-2 font-display text-sm uppercase tracking-[0.12em] text-white">${scene.label}</p>
+            <p class="mt-2 text-[11px] uppercase tracking-[0.24em] text-cyanGlow">${scene.duration}s</p>
+          `;
+          button.addEventListener("click", () => jumpToScene(scene.id, true));
+          sceneTimeline.appendChild(button);
+        });
+      }
+
+      function setActiveCreature(creatureId) {
+        const creature = creatures.find((item) => item.id === creatureId);
+        if (!creature) {
+          return;
+        }
+
+        activeCreature = creatureId;
+        creatureImage.src = creature.image;
+        creatureName.textContent = creature.name;
+        creatureHabitat.textContent = creature.habitat;
+        creatureClass.textContent = creature.classification;
+        creatureSize.textContent = creature.size;
+        creatureBehavior.textContent = creature.behavior;
+        creatureResponse.innerHTML = (creature.actions || [creature.response])
+          .slice(0, 2)
+          .map((item) => `<div class="flex items-start gap-2"><span class="mt-[2px] text-dangerGlow">•</span><span>${item}</span></div>`)
+          .join("");
+        creatureSummary.textContent = creature.summary;
+        intelAlertLabel.textContent = creature.name;
+        openIntelPanel();
+        playHudBeep("tap");
+        threatBadge.textContent = creature.threat;
+        threatBadge.className =
+          creature.threat === "Cực nguy hiểm"
+            ? "rounded-full border border-dangerGlow/20 bg-dangerGlow/10 px-2.5 py-1 text-[10px] tracking-[0.18em] text-dangerGlow"
+            : "rounded-full border border-warning/20 bg-warning/10 px-2.5 py-1 text-[10px] tracking-[0.18em] text-warning";
+
+        [...creatureList.children].forEach((button) => {
+          const isActive = button.dataset.creatureId === creatureId;
+          button.className = isActive
+            ? "overflow-hidden rounded-[14px] border border-cyanGlow/35 bg-cyanGlow/12 p-1 text-left shadow-neon transition"
+            : "overflow-hidden rounded-[14px] border border-white/8 bg-white/5 p-1 text-left transition hover:border-cyanGlow/22 hover:bg-cyanGlow/8";
+        });
+      }
+
+      function renderCreatures() {
+        creatureList.innerHTML = "";
+
+        creatures.forEach((creature) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.dataset.creatureId = creature.id;
+          button.className =
+            "overflow-hidden rounded-[14px] border border-white/8 bg-white/5 p-1 text-left transition hover:border-cyanGlow/22 hover:bg-cyanGlow/8";
+          button.innerHTML = `
+            <img src="${creature.image}" alt="${creature.name}" class="h-[36px] w-full rounded-[10px] object-cover object-center" />
+          `;
+          button.addEventListener("click", () => setActiveCreature(creature.id));
+          creatureList.appendChild(button);
+        });
+      }
+
+      function renderRescueMessages() {
+        rescueMessages.innerHTML = "";
+
+        rescueLog.slice(0, 2).forEach((entry) => {
+          const message = document.createElement("div");
+          message.className = "rounded-[18px] border border-cyanGlow/12 bg-abyss-900/60 px-3 py-2.5";
+          message.innerHTML = `
+            <div class="flex items-center justify-between gap-3">
+              <p class="font-display text-[11px] uppercase tracking-[0.22em] text-cyanGlow">${entry.author}</p>
+              <p class="text-[10px] uppercase tracking-[0.22em] text-slate-500">Log</p>
+            </div>
+            <p class="mt-1 text-[11px] text-slate-300">${compactText(entry.message, 68)}</p>
+          `;
+          rescueMessages.appendChild(message);
+        });
+
+        messageCount.textContent = `${rescueLog.length} tín hiệu cộng đồng`;
+      }
+
+      rescueForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const value = rescueInput.value.trim();
+
+        if (!value) {
+          return;
+        }
+
+        rescueLog.unshift({ author: "Field Operator", message: value });
+        rescueInput.value = "";
+        renderRescueMessages();
+        appendSystemLog(`Đã phát tín hiệu cứu hộ mới: "${value}"`, "success");
+        playHudBeep("success");
+      });
+      radarButton.addEventListener("click", () => {
+        radarCycleIndex = (radarCycleIndex + 1) % depthOptions.length;
+        pulseRadar();
+        setActiveDepth(depthOptions[radarCycleIndex].id);
+      });
+
+      [...launcherPrimaryNav.querySelectorAll("button")].forEach((button) => {
+        button.addEventListener("click", () => {
+          activeLauncherSection = button.dataset.section;
+          setSelectedGame();
+        });
+      });
+      launcherHeroPanel.addEventListener("click", async () => {
+        await openSelectedGame();
+      });
+      intelAlertButton.addEventListener("click", () => {
+        if (intelPanelOpen) {
+          closeIntelPanel();
+          return;
+        }
+        setActiveCreature(activeCreature);
+      });
+      closeIntelButton.addEventListener("click", () => {
+        closeIntelPanel();
+      });
+      audioToggle.addEventListener("click", () => {
+        setAudioEnabled(!audioState.enabled);
+      });
+      volumeSlider.addEventListener("input", (event) => {
+        updateVolume(Number(event.target.value) / 100);
+      });
+      hudPlayButton.addEventListener("click", () => {
+        if (missionVideo.paused) {
+          missionVideo.play().catch(() => {});
+          hudPlayButton.textContent = "❚❚ Pause";
+          playHudBeep("tap");
+          return;
+        }
+
+        missionVideo.pause();
+        hudPlayButton.textContent = "▶ Resume";
+        playHudBeep("tap");
+      });
+      missionVideo.addEventListener("play", () => {
+        hudPlayButton.textContent = "❚❚ Pause";
+        if (audioState.enabled) {
+          syncMissionAudio(true);
+          if (hasSeparateMissionAudio) {
+            missionAudio.play().catch(() => {});
+          }
+        }
+      });
+      missionVideo.addEventListener("pause", () => {
+        hudPlayButton.textContent = "▶ Resume";
+        if (hasSeparateMissionAudio) {
+          missionAudio.pause();
+        }
+      });
+      missionVideo.addEventListener("seeked", () => {
+        syncMissionAudio(true);
+      });
+      missionVideo.addEventListener("timeupdate", () => {
+        syncMissionAudio(false);
+      });
+      missionVideo.addEventListener("loadedmetadata", () => {
+        syncMissionAudio(true);
+        flushPendingSeek();
+      });
+      missionVideo.addEventListener("loadeddata", () => {
+        flushPendingSeek();
+      });
+      missionVideo.addEventListener("canplay", () => {
+        flushPendingSeek();
+      });
+      missionVideo.addEventListener("canplaythrough", () => {
+        flushPendingSeek();
+      });
+      launchGameButton.addEventListener("click", async () => {
+        await openSelectedGame();
+      });
+      previewGameButton.addEventListener("click", async () => {
+        await openSelectedGame();
+      });
+      backToLauncherButton.addEventListener("click", () => {
+        closeToLauncher();
+      });
+
+      renderFeaturedGames();
+      setSelectedGame();
+      renderDepthButtons();
+      renderWaypointButtons();
+      renderHudInteractionButtons();
+      renderSceneTimeline();
+      renderCreatures();
+      renderRescueMessages();
+      renderShipStats();
+      updateVolume(audioState.volume);
+      setActiveDepth(activeDepth);
+      setActiveCreature(activeCreature);
+      closeIntelPanel();
+      appendSystemLog("HUD đã chuyển sang gameplay overlay. Leviathan alert sẽ bật intel khi cần.", "default");
+    </script>
+  </body>
+</html>

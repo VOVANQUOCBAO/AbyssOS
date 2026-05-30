@@ -1,0 +1,81 @@
+{
+  "project": "AbyssOS Subsea Survival Protocol",
+  "model": "v6",
+  "quality": "1080p",
+  "aspect_ratio": "16:9",
+  "seed": 882144,
+  "audio": true,
+  "multi_shot": false,
+  "base_style": "Keep the same compact survival submersible, the same alien ocean planet, a bright colorful underwater world with bioluminescent coral, strange fish and glowing minerals, strong gameplay clarity, natural underwater ambience, sonar pings, engine hum, creature calls only, no spoken dialogue, no singing, no subtitles, no on-screen text or logos, and cohesive visual continuity across every shot.",
+  "gameplay_buttons": [
+    {
+      "id": "planetfall",
+      "label": "Planetfall",
+      "scene_id": "shot-01-planetfall"
+    },
+    {
+      "id": "scan",
+      "label": "Scan",
+      "scene_id": "shot-03-scan"
+    },
+    {
+      "id": "discover",
+      "label": "Discover",
+      "scene_id": "shot-04-ruins"
+    },
+    {
+      "id": "evade",
+      "label": "Evade",
+      "scene_id": "shot-05-leviathan"
+    },
+    {
+      "id": "signal",
+      "label": "Signal",
+      "scene_id": "shot-06-signal-rise"
+    }
+  ],
+  "shots": [
+    {
+      "id": "shot-01-planetfall",
+      "label": "Tiếp cận hành tinh lạ",
+      "duration": 6,
+      "seek_start": 0,
+      "prompt": "A compact survival craft drops through turquoise clouds toward a vast alien ocean planet, trailing vapor as the camera follows just behind the hull, sunlight breaks across endless water, bright reef islands and colossal cloud banks open below, the pilot commits to a fast descent toward a glowing blue landing zone."
+    },
+    {
+      "id": "shot-02-ocean-descent",
+      "label": "Lặn vào đại dương phát quang",
+      "duration": 6,
+      "seek_start": 6,
+      "prompt": "The same craft punches through the ocean surface and dives into clear tropical water, long alien kelp fronds sway past the canopy, schools of glowing fish scatter, red cyan and gold coral terraces spread beneath the hull, and the craft sinks deeper into a vivid living reef."
+    },
+    {
+      "id": "shot-03-scan",
+      "label": "Quét sinh vật và khoáng sản",
+      "duration": 7,
+      "seek_start": 12,
+      "prompt": "First-person cockpit view from the submersible as a scan pulse sweeps across darting alien fish, branching coral towers and bright cobalt amber and magenta mineral nodes, holographic scan rings expand over the seabed, tagged lifeforms glide through the beam, and the craft steadies itself between reef pillars."
+    },
+    {
+      "id": "shot-04-ruins",
+      "label": "Phát hiện tàn tích cổ",
+      "duration": 6,
+      "seek_start": 19,
+      "prompt": "The submersible threads through a giant mushroom-coral forest into an ancient alien structure half-buried in the sand, blue energy veins flicker across stone arches, small scavenger creatures circle the entrance, and the camera glides forward as the pilot eases into the ruin for a close inspection."
+    },
+    {
+      "id": "shot-05-leviathan",
+      "label": "Khóa mục tiêu leviathan",
+      "duration": 7,
+      "seek_start": 25,
+      "prompt": "A colossal bioluminescent leviathan surges out of a dark trench beside the ruin, the craft banks hard through bubbles and silt, warning lights strobe across the canopy, the creature snaps past the camera with glowing fins whipping the water, and the pilot veers away to avoid the attack."
+    },
+    {
+      "id": "shot-06-signal-rise",
+      "label": "Thoát hiểm và phát tín hiệu",
+      "duration": 7,
+      "seek_start": 32,
+      "prompt": "The damaged craft rockets upward through a volcanic vent field and neon crystal arches while an emergency beacon pulses from the hull, turbulent currents peel away behind it, the water grows brighter near the surface, and the final wide view reveals the strange ocean planet shimmering in daylight as the signal climbs toward orbit."
+    }
+  ]
+}
