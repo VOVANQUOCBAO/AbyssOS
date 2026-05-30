@@ -534,15 +534,7 @@
       const generatedImage = (prompt, imageSize = "landscape_16_9") =>
         `https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=${encodeURIComponent(prompt)}&image_size=${imageSize}`;
 
-      const FINAL_VIDEO_PATH = "assets/pixverse/final/abyssos-main-seekable.mp4";
-      const SCENE_VIDEO_SOURCES = {
-        "shot-01-planetfall": "assets/pixverse/shots/shot-01-planetfall.mp4",
-        "shot-02-ocean-descent": "assets/pixverse/shots/shot-02-ocean-descent.mp4",
-        "shot-03-scan": "assets/pixverse/shots/shot-03-scan.mp4",
-        "shot-04-ruins": "assets/pixverse/shots/shot-04-ruins.mp4",
-        "shot-05-leviathan": "assets/pixverse/shots/shot-05-leviathan.mp4",
-        "shot-06-signal-rise": "assets/pixverse/shots/shot-06-signal-rise.mp4",
-      };
+      const FINAL_VIDEO_PATH = "assets/pixverse/final/abyssos-main.mp4";
       const GAME_LIBRARY = [
         {
           id: "abyssos",
@@ -1685,30 +1677,6 @@
         }
       }
 
-      function playVideoSource(videoSrc, startTime = 0, autoPlay = true) {
-        pendingSeekTime = startTime;
-        pendingSeekAutoPlay = autoPlay;
-
-        if (!videoSrc) {
-          return;
-        }
-
-        const currentSrc = missionVideoSource.getAttribute("src");
-        if (currentSrc !== videoSrc) {
-          missionVideo.pause();
-          missionVideoSource.src = videoSrc;
-          missionVideo.load();
-          return;
-        }
-
-        if (missionVideo.readyState >= 2) {
-          flushPendingSeek();
-          return;
-        }
-
-        missionVideo.load();
-      }
-
       function performVideoSeek(seconds, autoPlay = true) {
         const duration = Number.isFinite(missionVideo.duration) && missionVideo.duration > 0 ? missionVideo.duration : seconds;
         const target = Math.min(Math.max(seconds, 0), Math.max(duration - 0.1, 0));
@@ -1824,19 +1792,9 @@
           return;
         }
 
-        const sceneVideoSrc = SCENE_VIDEO_SOURCES[sceneId];
-        if (sceneVideoSrc) {
-          playVideoSource(sceneVideoSrc, 0, autoPlay);
-        } else {
-          playVideoSource(FINAL_VIDEO_PATH, scene.seekStart, autoPlay);
-        }
+        jumpToTime(scene.seekStart, autoPlay);
         playHudBeep("tap");
-        appendSystemLog(
-          sceneVideoSrc
-            ? `Video chính đã chuyển sang phân cảnh ${scene.label}.`
-            : `Video chính đã nhảy tới phân cảnh ${scene.label} tại mốc ${scene.seekStart}s.`,
-          "default"
-        );
+        appendSystemLog(`Video chính đã nhảy tới phân cảnh ${scene.label} tại mốc ${scene.seekStart}s.`, "default");
 
         [...waypointButtons.children].forEach((button) => {
           const isActive = button.dataset.sceneId === sceneId;
